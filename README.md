@@ -15,3 +15,9 @@ Did you feel lost during your first year at the university? Do you know where yo
 Enhance your university experience using your Android device. Satisfy your tastebuds with local dinning options. Capture a location using the on-device camera to contribute to the community.  
 
 ## Storyboard
+
+![UptownCampusStoryboard](https://user-images.githubusercontent.com/122894342/213880521-5a6ccc2f-1405-4871-badd-ce3e44d8f73c.JPG)
+
+## Functional Requirements
+
+### Requirement 100.0: Search for class
