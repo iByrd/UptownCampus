@@ -25,3 +25,19 @@ Enhance your university experience using your Android device. Satisfy your taste
 ## Class Diagram
 
 ![UptownCampus Class Diagram](/UptownCampus_ClassDiagram.png)
+
+### Class Diagram Description
+
+**MainActivity:** The main screen of the app. It features a map that the user can search for classes and dining locations.\
+**RetrofitClientInstance:** Bootstrap class required for Retrofit\
+**Building:** Noun class that represent buildings on campus\
+**Class:** Noun class that represent classes\
+**Dining:** Noun class that represents dining options\
+**IBuildingService:** Interface class for BuildingService\
+**IClassService:** Interface class for ClassService\
+**IDiningService:** Interface class for DiningService\
+**BuidingService:** Business logic for buildings\
+**ClassService:** Business logic for classes\
+**DiningService:** Business logic for dining\
+**IClassDAO:** Interface for Room to persist Class data\
+**IDiningDAO:** Interface for Room ro persist Dining data\
