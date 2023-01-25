@@ -40,4 +40,9 @@ Enhance your university experience using your Android device. Satisfy your taste
 **ClassService:** Business logic for classes\
 **DiningService:** Business logic for dining\
 **IClassDAO:** Interface for Room to persist Class data\
-**IDiningDAO:** Interface for Room ro persist Dining data\
+**IDiningDAO:** Interface for Room to persist Dining data  
+
+## Scrum Roles  
+- Product Owner/Scrum Master/DevOps: Mike Byrd
+- Frontend Developer: Riley Setser
+- Integration Developer: Jakob Brown
