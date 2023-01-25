@@ -21,3 +21,7 @@ Enhance your university experience using your Android device. Satisfy your taste
 ## Functional Requirements
 
 ### Requirement 100.0: Search for class
+
+## Class Diagram
+
+![UptownCampus Class Diagram](/UptownCampus_ClassDiagram.png)
