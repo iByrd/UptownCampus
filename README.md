@@ -20,17 +20,13 @@ Enhance your university experience using your Android device. Satisfy your taste
 
 ## Functional Requirements
 
-Requirement 100: Search for Location 
+### Requirement 100.0: Search for Location 
 
- 
-
-Scenario: 
+**Scenario:** 
 
 As a student I want to find the building my classes are in so that I can attend my classes 
 
- 
-
-Dependencies: 
+**Dependencies:** 
 
 The location exists and is on campus 
 
@@ -38,147 +34,117 @@ There is internet connection
 
 The device has GPS capability 
 
- 
-
-Assumptions: 
+**Assumptions:** 
 
 The location is spelled correctly 
 
- 
+**Examples:** 
 
-Examples: 
+1.1
 
-1.1 
+**Given** The building exists 
 
-[Given] The building exists 
+**When** I search for teacher’s dyer 
 
-[When] I search for teacher’s dyer 
-
-[Then] Photos, comments and the location are provided of the Teacher’s Dyer building 
-
- 
+**Then** Photos, comments and the location are provided of the Teacher’s Dyer building 
 
 1.2 
 
-[Given] The building exists 
+**Given** The building exists 
 
-[When] I search for DAAP Cafe 
+**When** I search for DAAP Cafe 
 
-[Then] Photos, comments and the location are provided of the DAAP Cafe 
-
- 
+**Then** Photos, comments and the location are provided of the DAAP Cafe 
 
 1.3 
 
-[given] The building does not exist or typed incorrectly 
+**Given** The building does not exist or typed incorrectly 
 
-[when] I search for techer’s dier 
+**When** I search for techer’s dier 
 
-[then] the search result comes up empty 
+**Then** the search result comes up empty 
 
- 
+### Requirement 101.0: Save a photo 
 
- 
-
-Requirement 102.0: Save a photo 
-
- 
-
-Scenario: 
+**Scenario:** 
 
 As a student I want to save a photo of a location I just visited so that I can share my experience 
 
- 
-
-Dependencies: 
+**Dependencies:** 
 
 The device has a camera and GPS capabilities 
 
 There is internet connection 
 
- 
-
-Assumptions: 
+**Assumptions:**
 
 That the location is the correct one being photographed 
 
- 
-
-Examples: 
+**Examples:** 
 
 2.1 
 
-[Given] There is internet connection 
+**Given** There is internet connection 
 
-[When] I take a photo of the Teacher’s Dyer building 
+**When** I take a photo of the Teacher’s Dyer building 
 
-[Then] The photo will begin to post with a prompt to add a comment before posting if I want to 
+**Then** The photo will begin to post with a prompt to add a comment before posting if I want to 
 
 2.2 
 
-[Given] There is internet connection 
+**Given** There is internet connection 
 
-[When] I take a photo of the DAAP Café and begin to post it to the app 
+**When** I take a photo of the DAAP Café and begin to post it to the app 
 
-[Then] I will be prompted to add a comment about the DAAP Café before posting 
+**Then** I will be prompted to add a comment about the DAAP Café before posting 
 
 2.3 
 
-[Given] There is no internet connection 
+**Given** There is no internet connection 
 
-[When] I take my photo DAAP Café and go to post it on the app 
+**When** I take my photo DAAP Café and go to post it on the app 
 
-[Then] The photo will fail to post 
+**Then** The photo will fail to post 
 
- 
+### Requirement 102.0: Save a comment 
 
- 
-
-Requirement 103: Save a comment 
-
-Scenario: 
+**Scenario:**
 
 As a student I want to save a comment on a location so that I can share my thoughts or experience on that location 
 
- 
-
-Dependencies: 
+**Dependencies:** 
 
 There is internet connection and the device has GPS capabilities 
 
- 
-
-Assumptions: 
+**Assumptions:**
 
 The location is the correct one being commented on 
 
- 
-
-Examples: 
+**Examples:**
 
 3.1 
 
-[Given] There is internet connection 
+**Given** There is internet connection 
 
-[When] I write a comment about the DAAP Café and post it 
+**When** I write a comment about the DAAP Café and post it 
 
-[Then] My comment and photo will be posted publicly to the app 
+**Then** My comment and photo will be posted publicly to the app 
 
 3.2 
 
-[Given] There is internet connection 
+**Given** There is internet connection 
 
-[When] I write a comment about the Teacher’s Dyer building and post it 
+**When** I write a comment about the Teacher’s Dyer building and post it 
 
-[Then] My comment and photo will be posted publicly to the app 
+**Then** My comment and photo will be posted publicly to the app 
 
 3.3 
 
-[Given] There is no internet connection 
+**Given** There is no internet connection 
 
-[When] I write my comment about nipper stadium and try to post it 
+**When** I write my comment about nipper stadium and try to post it 
 
-[Then] The post will fail to post to the application 
+**Then** The post will fail to post to the application 
 
 ## Class Diagram
 
