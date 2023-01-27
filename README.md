@@ -170,3 +170,7 @@ The location is the correct one being commented on
 - Product Owner/Scrum Master/DevOps: Mike Byrd
 - Frontend Developer: Riley Setser
 - Integration Developer: Jakob Brown
+
+## Weekly Meeting
+
+Thursday at 5pm. Meeting is held on Microsoft Teams in our group chat.
