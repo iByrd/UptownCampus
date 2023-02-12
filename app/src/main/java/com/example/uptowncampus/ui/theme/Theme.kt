@@ -1,5 +1,6 @@
 package com.example.uptowncampus.ui.theme
 
+import android.graphics.Color
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -13,9 +14,11 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Black,
+    primaryVariant = LightGray,
+    secondary = White,
+    background = Red,
+    surface = White
 
     /* Other default colors to override
     background = Color.White,
