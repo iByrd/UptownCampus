@@ -1,0 +1,50 @@
+[
+	{
+	"id":"1",
+	"buildingName":"Teachers-Dyer Complex"
+	},
+	{
+	"id":"2",
+	"buildingName":"College of Law"
+	},
+	{
+	"id":"3",
+	"buildingName":"Blegen Library"
+	},
+	{
+	"id":"4",
+	"buildingName":"Blegen Library"
+	},
+	{
+	"id":"5",
+	"buildingName":"Van Wormer Hall"
+	},
+	{
+	"id":"6",
+	"buildingName":"Van Wormer Hall"
+	},
+	{
+	"id":"7",
+	"buildingName":"Corbett Center for Performing Arts"
+	},
+	{
+	"id":"8",
+	"buildingName":"Mary Emery Hall"
+	},
+	{
+	"id":"9",
+	"buildingName":"Arts & Sciences Hall"
+	},
+	{
+	"id":"10",
+	"buildingName":"University Pavilion"
+	},
+	{
+	"id":"11",
+	"buildingName":"Tangeman University Center"
+	},
+	{
+	"id":"12",
+	"buildingName":"Nippert Stadium"
+	}
+]
