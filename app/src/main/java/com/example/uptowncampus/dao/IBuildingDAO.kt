@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface IBuildingDAO {
 
-    @GET("/UptownCampus/blob/TDD_BDD_ParseJSONwithRetroFit/buildingsJSON.txt")
+    @GET("/perl/mobile/viewplantsjsonarray.pl")
     fun getAllBuildings() : Call<ArrayList<Building>>
 }
