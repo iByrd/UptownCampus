@@ -38,7 +38,7 @@ class BuildingTests {
         assertTrue(allBuildings!!.isNotEmpty())
         var containsTeacher = false
         allBuildings!!.forEach {
-            if (it.buildingName.equals("Cercis")) {
+            if (it.buildingName.equals("Teachers-Dyer Complex")) {
                     containsTeacher = true
                 }
         }

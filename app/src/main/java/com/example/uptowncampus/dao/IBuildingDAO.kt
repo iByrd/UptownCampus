@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface IBuildingDAO {
 
-    @GET("/perl/mobile/viewplantsjsonarray.pl")
+    @GET("/~byrdj7/UptownCampus/buildingsJSON.json")
     fun getAllBuildings() : Call<ArrayList<Building>>
 }
