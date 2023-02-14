@@ -6,11 +6,11 @@ import com.example.uptowncampus.service.BuildingService
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.rules.TestRule
 
-class BuildingTests {
+// Setup test based on our Requirements doc to ensure app is meeting expected functionality
+class BuildingIntegrationTests {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
