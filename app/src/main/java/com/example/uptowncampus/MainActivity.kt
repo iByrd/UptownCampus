@@ -164,6 +164,7 @@ class MainActivity : ComponentActivity() {
                         } ?: 0
                         commentContent = inComment
                     }
+                    viewModel.save(studentComment)
                     Toast.makeText(
                         context,
                         "$inBuildingName $diningOptions $activityName",
