@@ -130,6 +130,7 @@ class MainActivity : ComponentActivity() {
         var buildingName by remember { mutableStateOf("") }
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
+        var comment by remember { mutableStateOf("") }
         val context = LocalContext.current
         Column {
             TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
@@ -143,6 +144,12 @@ class MainActivity : ComponentActivity() {
                 value = activityName,
                 onValueChange = { activityName = it },
                 label = { Text(stringResource(R.string.activityName)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it},
+                label = { Text(stringResource(R.string.comment))},
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
