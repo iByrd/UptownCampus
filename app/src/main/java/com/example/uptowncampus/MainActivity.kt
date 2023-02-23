@@ -85,4 +85,5 @@ fun DefaultPreview() {
     UptownCampusTheme {
         BuildingName("Android")
     }
+
 }
