@@ -176,7 +176,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 BuildingName("Android")
             }
-
         }
     }
 }
