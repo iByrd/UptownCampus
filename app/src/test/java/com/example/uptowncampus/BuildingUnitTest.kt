@@ -25,7 +25,7 @@ class BuildingUnitTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    lateinit var mainViewModel : MainViewModel
+    lateinit var mainViewModel : MockViewModel
 
     @MockK
     lateinit var mockBuildingService : BuildingService
@@ -63,7 +63,7 @@ class BuildingUnitTest {
 
         coEvery {mockBuildingService.fetchBuilding()} returns buildings
 
-        mainViewModel = MainViewModel(buildingService = mockBuildingService)
+        mainViewModel = MockViewModel(buildingService = mockBuildingService)
 
     }
 
