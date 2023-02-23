@@ -3,6 +3,8 @@ package com.example.uptowncampus
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.service.BuildingService
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
@@ -17,6 +19,9 @@ class BuildingTests {
 
     lateinit var buildingService : BuildingService
     var allBuildings : List<Building>? = ArrayList<Building>()
+
+    @MockK
+    lateinit var mockBuildingService : BuildingService
 
     @Test
     fun `Given building data is available when I search for Teacher then I should receive Teacher Dyer` () = runTest {
@@ -43,5 +48,37 @@ class BuildingTests {
                 }
         }
         assertTrue(containsTeacher)
+    }
+
+    @Test
+    fun `given a view model with live data when populated with buildings then results show Teachers-Dyer` () {
+        givenViewModelIsInitializedUsingMockData()
+        whenBuildingServiceFetchBuildingsInvoked()
+        thenResultsShouldContainTeacherDyer()
+    }
+
+    private fun givenViewModelIsInitializedUsingMockData() {
+        //Will contain the building objects
+        val buildings = ArrayList<Building>()
+
+        //Hardcoded building objects
+        buildings.add(Building(1, "Teachers-Dyer"))
+        buildings.add(Building(2, "College of Law"))
+        buildings.add(Building(3, "Blegen Library"))
+        buildings.add(Building(4, "University Pavilion"))
+
+        coEvery {mockBuildingService.fetchBuilding()} returns buildings
+
+        mvm = MainViewModel()
+        mvm.buildingService = mockBuildingService
+
+    }
+
+    private fun whenBuildingServiceFetchBuildingsInvoked() {
+
+    }
+
+    private fun thenResultsShouldContainTeacherDyer() {
+        TODO("Not yet implemented")
     }
 }
