@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.service.BuildingService
+import com.example.uptowncampus.service.IBuildingService
 import kotlinx.coroutines.launch
 
-class MainViewModel (var buildingService : BuildingService = BuildingService()) : ViewModel() {
-    var buildings : MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
+class MainViewModel (var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
+    var buildings : MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
 
     fun fetchBuilding() {
         viewModelScope.launch {
