@@ -20,14 +20,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
+import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : ComponentActivity() {
 
+    private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel<MainViewModel>()
-    private var strSelectedData: String = ""
+    private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
         }
 
         fun onValueChanged(value: TextFieldValue) {
-            strSelectedData = value.text
+            inBuildingName = value.text
             dropDownExpanded.value = true
             textFieldValue.value = value
             dropDownOptions.value = dataIn.filter {
@@ -117,6 +119,7 @@ class MainActivity : ComponentActivity() {
                                 TextRange(text.toString().length)
                             )
                         )
+                        selectedBuilding = text
                     }) {
                         Text(text = text.toString())
                     }
@@ -127,10 +130,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
-        var buildingName by remember { mutableStateOf("") }
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
-        var comment by remember { mutableStateOf("") }
+        var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
         Column {
             TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
@@ -147,17 +149,24 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
-                value = comment,
-                onValueChange = { comment = it},
+                value = inComment,
+                onValueChange = { inComment = it},
                 label = { Text(stringResource(R.string.comment))},
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
+                    var studentComment = StudentComment().apply {
+                        buildingName = inBuildingName
+                        buildingId = selectedBuilding?.let {
+                            it.id
+                        } ?: 0
+                        commentContent = inComment
+                    }
                     Toast.makeText(
                         context,
-                        "$buildingName $diningOptions $activityName",
+                        "$inBuildingName $diningOptions $activityName",
                         Toast.LENGTH_LONG
                     ).show()
                 }
