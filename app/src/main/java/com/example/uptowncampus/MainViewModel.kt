@@ -7,9 +7,9 @@ import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.service.BuildingService
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel (var buildingService : BuildingService = BuildingService()) : ViewModel() {
     var buildings : MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
-    var buildingService : BuildingService = BuildingService()
+
 
     fun fetchBuilding() {
         viewModelScope.launch {
