@@ -3,4 +3,5 @@
     <string name="buildingName">Building Name</string>
     <string name="diningOptions">Dining Options</string>
     <string name="activityName">Activity Name</string>
+    <string name="buildingNameLabel">Building Name</string>
 </resources>
