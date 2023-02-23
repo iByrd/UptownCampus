@@ -8,9 +8,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
-class BuildingService {
+interface IBuildingService {
+    suspend fun fetchBuilding() : List<Building>?
+}
 
-    suspend fun fetchBuilding() : List<Building>? {
+class BuildingService : IBuildingService {
+
+    override suspend fun fetchBuilding() : List<Building>? {
         return withContext(Dispatchers.IO) {
             val service = RetrofitClientInstance.retrofitInstance?.create(IBuildingDAO::class.java)
             val buildings = async {service?.getAllBuildings()}
