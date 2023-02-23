@@ -68,4 +68,5 @@ dependencies {
     implementation 'io.mockk:mockk:1.12.2'
     implementation 'io.insert-koin:koin-android:3.1.4'
     implementation 'com.squareup.okhttp:4.9.2'
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
 }

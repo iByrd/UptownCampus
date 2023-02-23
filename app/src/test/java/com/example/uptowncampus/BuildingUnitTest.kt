@@ -65,7 +65,6 @@ class BuildingUnitTest {
 
         mainViewModel = MainViewModel(buildingService = mockBuildingService)
 
-
     }
 
     private fun whenBuildingServiceFetchBuildingsInvoked() {
