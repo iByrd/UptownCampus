@@ -10,13 +10,10 @@ import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
-
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
-
     private lateinit var firestore : FirebaseFirestore
 
     init {
@@ -26,13 +23,13 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 
     fun fetchBuildings() {
         viewModelScope.launch {
-            var innerBuildings = buildingService.fetchBuilding()
+            val innerBuildings = buildingService.fetchBuilding()
             buildings.postValue(innerBuildings)
         }
     }
 
     fun save(studentComment: StudentComment) {
-        val document = if (studentComment.commentId == null || studentComment.commentId.isEmpty()) {
+        val document = if (studentComment.commentId.isEmpty()) {
             firestore.collection("comments").document()
         } else {
             firestore.collection("comments").document(studentComment.commentId)

@@ -20,7 +20,6 @@ import org.junit.rules.TestRule
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-
 class BuildingUnitTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
@@ -64,7 +63,6 @@ class BuildingUnitTest {
         coEvery {mockBuildingService.fetchBuilding()} returns buildings
 
         mainViewModel = MockViewModel(buildingService = mockBuildingService)
-
     }
 
     private fun whenBuildingServiceFetchBuildingsInvoked() {
@@ -75,7 +73,7 @@ class BuildingUnitTest {
     private fun thenResultsShouldContainTeacherDyer() {
         //capture results
         var allBuildings : List<Building>? = ArrayList<Building>()
-        var latch = CountDownLatch(1)
+        val latch = CountDownLatch(1)
         val observer = object : Observer<List<Building>> {
             override fun onChanged(buildingsRecieved: List<Building>?) {
                 allBuildings = buildingsRecieved

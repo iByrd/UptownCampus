@@ -24,11 +24,9 @@ import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : ComponentActivity() {
-
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +40,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName("Android", buildings)
+                    BuildingName(buildings)
                 }
             }
         }
     }
-
 
     @Composable
     fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "") {
@@ -129,7 +126,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
+    fun BuildingName(buildings : List<Building> = ArrayList()) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
@@ -157,7 +154,7 @@ class MainActivity : ComponentActivity() {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    var studentComment = StudentComment().apply {
+                    val studentComment = StudentComment().apply {
                         buildingName = inBuildingName
                         buildingId = selectedBuilding?.let {
                             it.id
@@ -182,7 +179,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         UptownCampusTheme {
-            BuildingName("Android")
+            BuildingName()
         }
     }
 }
