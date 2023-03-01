@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
                 value = value,
                 onValueChange = setValue,
                 label = { Text(label) },
-                colors = TextFieldDefaults.outlinedTextFieldColors()
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             DropdownMenu(
                 expanded = dropDownExpanded,
@@ -137,19 +138,22 @@ class MainActivity : ComponentActivity() {
                 value = diningOptions,
                 onValueChange = { diningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = activityName,
                 onValueChange = { activityName = it },
                 label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = inComment,
                 onValueChange = { inComment = it},
                 label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
