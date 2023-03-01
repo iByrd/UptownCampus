@@ -7,6 +7,7 @@ import com.example.uptowncampus.service.BuildingService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import junit.framework.TestCase
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
@@ -45,12 +46,6 @@ class BuildingTests {
     private fun thenTheBuildingCollectionShouldContainTeacherDyer() {
         assertNotNull(allBuildings)
         assertTrue(allBuildings!!.isNotEmpty())
-        var containsTeacher = false
-        allBuildings!!.forEach {
-            if (it.buildingName.equals("Teachers-Dyer Complex")) {
-                    containsTeacher = true
-                }
-        }
-        assertTrue(containsTeacher)
+        assertTrue(Building(1,"Teachers-Dyer Complex") in allBuildings!!)
     }
 }

@@ -89,12 +89,6 @@ class BuildingUnitTest {
 
         TestCase.assertNotNull(allBuildings)
         TestCase.assertTrue(allBuildings!!.isNotEmpty())
-        var containsTeacher = false
-        allBuildings!!.forEach{
-            if (it.buildingName.equals("Teachers-Dyer")) {
-                containsTeacher = true
-            }
-        }
-        TestCase.assertTrue(containsTeacher)
+        TestCase.assertTrue(Building(1,"Teachers-Dyer") in allBuildings!!)
     }
 }
