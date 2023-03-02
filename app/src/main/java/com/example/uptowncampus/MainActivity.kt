@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
     private var userInputBuildingName: String = ""
-    private lateinit var studentComment: StudentComment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,36 +141,47 @@ class MainActivity : ComponentActivity() {
                 value = localDiningOptions,
                 onValueChange = { localDiningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = localActivity,
                 onValueChange = { localActivity = it },
                 label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = userInputComment,
                 onValueChange = { userInputComment = it},
                 label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                     studentComment = StudentComment().apply {
-                         buildingName = userInputBuildingName
-                         buildingId = selectedBuilding?.let {
-                             it.id
-                         } ?: 0
-                        commentContent = userInputComment
+                    if(userInputBuildingName.isNotEmpty() && userInputBuildingName.isNotEmpty() && selectedBuilding != null) {
+                        val studentComment = StudentComment().apply {
+                            buildingName = userInputBuildingName
+                            buildingId = selectedBuilding?.let {
+                                it.id
+                            } ?: 0
+                            commentContent = userInputComment
+                        }
+                        viewModel.save(studentComment)
+                        Toast.makeText(
+                            context,
+                            "$userInputBuildingName $localDiningOptions $localActivity",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else{
+                        Toast.makeText(
+                            context,
+                            "Please enter values fro all required fields",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
-                    viewModel.save(studentComment)
-                    Toast.makeText(
-                        context,
-                        "$userInputBuildingName $localDiningOptions $localActivity",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             )
             {
