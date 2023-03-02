@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
                     val studentComment = StudentComment().apply {
                         buildingName = inBuildingName
                         buildingId = selectedBuilding?.let {
-                            it.id
+                            it.buildingId
                         } ?: 0
                         commentContent = inComment
                     }
