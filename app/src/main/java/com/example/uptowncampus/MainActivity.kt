@@ -1,5 +1,6 @@
 package com.example.uptowncampus
 
+import androidx.compose.ui.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,8 +29,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : ComponentActivity() {
 
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
-    private var inBuildingName: String = ""
+    private val viewModel: MainViewModel by viewModel()
+    private var userInputBuildingName: String = ""
+    private lateinit var studentComment: StudentComment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,7 @@ class MainActivity : ComponentActivity() {
         }
 
         fun onValueChanged(value: TextFieldValue) {
-            inBuildingName = value.text
+            userInputBuildingName = value.text
             dropDownExpanded.value = true
             textFieldValue.value = value
             dropDownOptions.value = dataIn.filter {
@@ -100,7 +102,7 @@ class MainActivity : ComponentActivity() {
                 value = value,
                 onValueChange = setValue,
                 label = { Text(label) },
-                colors = TextFieldDefaults.outlinedTextFieldColors()
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             DropdownMenu(
                 expanded = dropDownExpanded,
@@ -129,45 +131,45 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
-        var diningOptions by remember { mutableStateOf("") }
-        var activityName by remember { mutableStateOf("") }
-        var inComment by remember { mutableStateOf("") }
+    fun BuildingName(name: String, buildings : List<Building> = ArrayList()) {
+        var localDiningOptions by remember { mutableStateOf("") }
+        var localActivity by remember { mutableStateOf("") }
+        var userInputComment by remember { mutableStateOf("") }
         val context = LocalContext.current
         Column {
             TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
             OutlinedTextField(
-                value = diningOptions,
-                onValueChange = { diningOptions = it },
+                value = localDiningOptions,
+                onValueChange = { localDiningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
-                value = activityName,
-                onValueChange = { activityName = it },
+                value = localActivity,
+                onValueChange = { localActivity = it },
                 label = { Text(stringResource(R.string.activityName)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
-                value = inComment,
-                onValueChange = { inComment = it},
+                value = userInputComment,
+                onValueChange = { userInputComment = it},
                 label = { Text(stringResource(R.string.comment))},
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    var studentComment = StudentComment().apply {
-                        buildingName = inBuildingName
-                        buildingId = selectedBuilding?.let {
-                            it.id
-                        } ?: 0
-                        commentContent = inComment
+                     studentComment = StudentComment().apply {
+                         buildingName = userInputBuildingName
+                         buildingId = selectedBuilding?.let {
+                             it.id
+                         } ?: 0
+                        commentContent = userInputComment
                     }
                     viewModel.save(studentComment)
                     Toast.makeText(
                         context,
-                        "$inBuildingName $diningOptions $activityName",
+                        "$userInputBuildingName $localDiningOptions $localActivity",
                         Toast.LENGTH_LONG
                     ).show()
                 }

@@ -17,9 +17,8 @@ class BuildingService : IBuildingService {
     override suspend fun fetchBuilding() : List<Building>? {
         return withContext(Dispatchers.IO) {
             val service = RetrofitClientInstance.retrofitInstance?.create(IBuildingDAO::class.java)
-            val buildings = async {service?.getAllBuildings()}
-            var results = buildings.await()?.awaitResponse()?.body()
-            return@withContext results
+            val buildings = async { service?.getAllBuildings() }
+            return@withContext buildings.await()?.awaitResponse()?.body()
         }
     }
 }

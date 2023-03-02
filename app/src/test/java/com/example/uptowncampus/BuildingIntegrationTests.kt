@@ -7,7 +7,6 @@ import com.example.uptowncampus.service.BuildingService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import junit.framework.TestCase
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
