@@ -158,7 +158,6 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     var studentComment = StudentComment().apply {
-                        buildingName = inBuildingName
                         buildingId = selectedBuilding?.let {
                             it.id
                         } ?: 0
