@@ -64,7 +64,6 @@ class BuildingUnitTest {
         coEvery {mockBuildingService.fetchBuilding()} returns buildings
 
         mainViewModel = MockViewModel(buildingService = mockBuildingService)
-
     }
 
     private fun whenBuildingServiceFetchBuildingsInvoked() {
