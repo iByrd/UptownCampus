@@ -151,7 +151,7 @@ class MainActivity : ComponentActivity() {
             OutlinedTextField(
                 value = inComment,
                 onValueChange = { inComment = it},
-                label = { Text(stringResource(R.string.comment))},
+                label = { Text(stringResource(R.string.comment)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
