@@ -1,6 +1,5 @@
 package com.example.uptowncampus
 
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -22,11 +21,12 @@ import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
 
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
+    fun BuildingName(name: String, buildings : List<Building> = List<Building>()) {
         var buildingname by remember { mutableStateOf(" ") }
         var diningOptions by remember { mutableStateOf(" ") }
         var activityName by remember { mutableStateOf("") }
@@ -195,6 +195,7 @@ class MainActivity : ComponentActivity() {
                 Text(text = "Submit")
             }
         }
+
     }
 
     @Preview(showBackground = true)

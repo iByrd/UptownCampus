@@ -75,7 +75,7 @@ class BuildingUnitTest {
     private fun thenResultsShouldContainTeacherDyer() {
         //capture results
         var allBuildings : List<Building>? = ArrayList<Building>()
-        var latch = CountDownLatch(1)
+        val latch = CountDownLatch(1)
         val observer = object : Observer<List<Building>> {
             override fun onChanged(buildingsRecieved: List<Building>?) {
                 allBuildings = buildingsRecieved
