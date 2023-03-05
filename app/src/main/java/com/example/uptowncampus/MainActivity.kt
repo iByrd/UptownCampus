@@ -1,13 +1,11 @@
 package com.example.uptowncampus
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -18,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.StudentComment
@@ -36,12 +35,20 @@ class MainActivity : ComponentActivity() {
             viewModel.fetchBuildings()
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    BuildingName("Android", buildings)
+                Column {
+                    // Add your header composable here
+                    Text(text = "Uptown Campus", modifier = Modifier.padding(26.dp) , color=MaterialTheme.colors.background) //added a header
+
+                    // Add a spacer with a height of 16.dp
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        BuildingName("Android", buildings)
+                    }
+
+
                 }
             }
         }
@@ -68,7 +75,10 @@ class MainActivity : ComponentActivity() {
         }
 
         TextFieldWithDropdown(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
+
+
             value = textFieldValue.value,
             setValue = ::onValueChanged,
             onDismissRequest = ::onDropdownDismissRequest,
@@ -129,32 +139,42 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
-        var diningOptions by remember { mutableStateOf("") }
+        var buildingname by remember { mutableStateOf(" ") }
+        var diningOptions by remember { mutableStateOf(" ") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
         Column {
             TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
+
+
             OutlinedTextField(
                 value = diningOptions,
                 onValueChange = { diningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth(),
+
             )
             OutlinedTextField(
                 value = activityName,
                 onValueChange = { activityName = it },
                 label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth(),
+
             )
             OutlinedTextField(
                 value = inComment,
                 onValueChange = { inComment = it},
                 label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth(),
+
             )
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 onClick = {
                     var studentComment = StudentComment().apply {
                         buildingName = inBuildingName
