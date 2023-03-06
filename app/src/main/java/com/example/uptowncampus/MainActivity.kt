@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(name: String, buildings : List<Building> = List<Building>()) {
+    fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
         var buildingname by remember { mutableStateOf(" ") }
         var diningOptions by remember { mutableStateOf(" ") }
         var activityName by remember { mutableStateOf("") }
