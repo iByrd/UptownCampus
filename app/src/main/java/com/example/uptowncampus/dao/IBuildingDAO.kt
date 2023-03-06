@@ -5,7 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface IBuildingDAO {
-
     @GET("/~byrdj7/UptownCampus/buildingsJSON.json")
-    fun getAllBuildings() : Call<ArrayList<Building>>
+    fun getAllBuildings(): Call<List<Building>>
 }

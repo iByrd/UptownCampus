@@ -17,7 +17,7 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
 
-    private lateinit var firestore : FirebaseFirestore
+    private lateinit var firestore: FirebaseFirestore
 
     init {
         firestore = FirebaseFirestore.getInstance()
@@ -32,14 +32,16 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
     }
 
     fun save(studentComment: StudentComment) {
-        val document = if (studentComment.commentId == null || studentComment.commentId.isEmpty()) {
-            firestore.collection("comments").document()
-        } else {
-            firestore.collection("comments").document(studentComment.commentId)
-        }
+        val document = firestore.collection("comments").document(studentComment.commentId ?: "")
         studentComment.commentId = document.id
-        val handle = document.set(studentComment)
-        handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
-        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
+        document.set(studentComment)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Firebase", "Document saved")
+                } else {
+                    Log.e("Firebase", "Save failed ${task.exception}")
+                }
+            }
     }
 }
+
