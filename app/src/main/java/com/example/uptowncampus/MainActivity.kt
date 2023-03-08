@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
-    private var userInputBuildingName: String = ""
+    private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
