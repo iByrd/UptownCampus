@@ -5,14 +5,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClientInstance {
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://homepages.uc.edu/"
+    private const val BASE_URL = "https://homepages.uc.edu/"
 
     val retrofitInstance : Retrofit?
         get() {
             // check if this object has been created
             if (retrofit == null) {
                 // create it
-                retrofit = retrofit2.Retrofit.Builder()
+                retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()

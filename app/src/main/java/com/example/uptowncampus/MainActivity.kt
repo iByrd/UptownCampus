@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -24,11 +25,9 @@ import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : ComponentActivity() {
-
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +41,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName("Android", buildings)
+                    BuildingName(buildings)
                 }
             }
         }
     }
-
 
     @Composable
     fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "") {
@@ -100,7 +98,7 @@ class MainActivity : ComponentActivity() {
                 value = value,
                 onValueChange = setValue,
                 label = { Text(label) },
-                colors = TextFieldDefaults.outlinedTextFieldColors()
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             DropdownMenu(
                 expanded = dropDownExpanded,
@@ -129,7 +127,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(name: String, buildings : List<Building> = ArrayList<Building>()) {
+    fun BuildingName(buildings : List<Building> = ArrayList()) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
@@ -140,27 +138,30 @@ class MainActivity : ComponentActivity() {
                 value = diningOptions,
                 onValueChange = { diningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = activityName,
                 onValueChange = { activityName = it },
                 label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             OutlinedTextField(
                 value = inComment,
                 onValueChange = { inComment = it},
                 label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    var studentComment = StudentComment().apply {
+                    val studentComment = StudentComment().apply {
                         buildingName = inBuildingName
                         buildingId = selectedBuilding?.let {
-                            it.id
+                            it.buildingId
                         } ?: 0
                         commentContent = inComment
                     }
@@ -182,7 +183,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         UptownCampusTheme {
-            BuildingName("Android")
+            BuildingName()
         }
     }
 }
