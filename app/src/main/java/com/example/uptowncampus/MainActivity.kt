@@ -62,8 +62,8 @@ class MainActivity : ComponentActivity() {
             dropDownExpanded.value = true
             textFieldValue.value = value
             dropDownOptions.value = dataIn.filter {
-                it.toString().startsWith(value.text) && it.toString() != value.text
-            }.take(3)
+                it.toString().contains(value.text,true) && it.toString() != value.text
+            }.sortedBy { it.toString().indexOf(value.text, 0, true) }.take(3)
         }
 
         TextFieldWithDropdown(
