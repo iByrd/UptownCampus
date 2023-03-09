@@ -11,6 +11,7 @@ import com.example.uptowncampus.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.launch
+import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
@@ -23,8 +24,11 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 
     fun fetchBuildings() {
         viewModelScope.launch {
-            val innerBuildings = buildingService.fetchBuilding()
-            buildings.postValue(innerBuildings)
+            try{
+                buildings.postValue(buildingService.fetchBuilding())
+            } catch(e: JSONException){
+                Log.e("buildingService", "Failed to fetch buildings")
+            }
         }
     }
 
