@@ -174,7 +174,7 @@ class MainActivity : ComponentActivity() {
                 }
             )
             {
-                Text(text = "Submit")
+                Text(text = stringResource(R.string.submit))
             }
         }
     }
