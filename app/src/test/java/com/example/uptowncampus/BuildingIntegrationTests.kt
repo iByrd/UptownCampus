@@ -45,12 +45,6 @@ class BuildingTests {
     private fun thenTheBuildingCollectionShouldContainTeacherDyer() {
         assertNotNull(allBuildings)
         assertTrue(allBuildings!!.isNotEmpty())
-        var containsTeacher = false
-        allBuildings!!.forEach {
-            if (it.buildingName.equals("Teachers-Dyer Complex")) {
-                    containsTeacher = true
-                }
-        }
-        assertTrue(containsTeacher)
+        assertTrue(allBuildings!!.any { it.buildingName.equals("Teachers-Dyer Complex") })
     }
 }
