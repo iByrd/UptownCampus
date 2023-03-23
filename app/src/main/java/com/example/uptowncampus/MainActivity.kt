@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -172,7 +176,7 @@ class MainActivity : ComponentActivity() {
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
-        Column {
+        Column (horizontalAlignment = Alignment.CenterHorizontally) {
             BuildingSpinner(savedBuildings = savedBuildings)
             TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
             OutlinedTextField(
@@ -197,7 +201,7 @@ class MainActivity : ComponentActivity() {
                 colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
             )
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                shape = CutCornerShape(10),
                 onClick = {
                     val studentComment = StudentComment().apply {
                         buildingName = inBuildingName
@@ -215,6 +219,11 @@ class MainActivity : ComponentActivity() {
                 }
             )
             {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp)
+                )
                 Text(text = stringResource(R.string.submit))
             }
         }
