@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -178,8 +179,19 @@ class MainActivity : ComponentActivity() {
         val context = LocalContext.current
         Column (horizontalAlignment = Alignment.CenterHorizontally) {
             BuildingSpinner(savedBuildings = savedBuildings)
-            TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
-            OutlinedTextField(
+            Text ("Search and Add your UC locations", fontSize = 18.sp)
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                TextFieldWithDropdownUsage(
+                    dataIn = buildings,
+                    stringResource(R.string.buildingName)
+                )
+            }
+                OutlinedTextField(
                 value = diningOptions,
                 onValueChange = { diningOptions = it },
                 label = { Text(stringResource(R.string.diningOptions)) },
