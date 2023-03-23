@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -30,13 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
-import com.example.uptowncampus.dto.StudentComment
+import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel<MainViewModel>()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,25 +43,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             viewModel.fetchBuildings()
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
-            // dummy data for testing only - NEED TO REMOVE LATER
-            val savedBuildings = ArrayList<Building>()
-            savedBuildings.add(Building(buildingName = "Nippert Stadium"))
-            savedBuildings.add(Building(buildingName = "Rec Center"))
-            savedBuildings.add(Building(buildingName = "Fifth Third Arena"))
+            val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName(buildings, savedBuildings)
+                    BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
                 }
             }
         }
     }
 
     @Composable
-    fun BuildingSpinner (savedBuildings : List<Building>) {
+    fun BuildingSpinner (savedBuildings : List<SavedBuildings>) {
         var buildingText by remember {(mutableStateOf("Building Collection"))}
         var expanded by remember {(mutableStateOf(false))}
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -81,8 +76,18 @@ class MainActivity : ComponentActivity() {
                     savedBuildings.forEach {
                         building -> DropdownMenuItem(onClick = {
                             expanded = false
+
+                        if (building.buildingName == viewModel.NEW_BUILDING) {
+                            // for new buildings to be added to the database
+                            buildingText = ""
+                            building.buildingName = ""
+                        } else {
+                            // for existing buildings, to prevent duplication
                             buildingText = building.toString()
-                            selectedBuilding = building
+                            selectedBuilding = Building(buildingId = 0, buildingName = building.buildingName)
+                            inBuildingName = building.buildingName
+                        }
+                        viewModel.selectedSavedBuilding = building
                     }) {
                             Text(text = building.toString())
                     }
@@ -93,9 +98,9 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "") {
+    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "", selectedSavedBuilding: SavedBuildings = SavedBuildings()) {
         val dropDownOptions = remember { mutableStateOf(listOf<Building>()) }
-        val textFieldValue = remember { mutableStateOf(TextFieldValue()) }
+        val textFieldValue = remember(selectedSavedBuilding.buildingId) { mutableStateOf(TextFieldValue(selectedSavedBuilding.buildingName)) }
         val dropDownExpanded = remember { mutableStateOf(false) }
 
         fun onDropdownDismissRequest() {
@@ -172,7 +177,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(buildings : List<Building> = ArrayList(), savedBuildings : List<Building> = ArrayList<Building>()) {
+    fun BuildingName(
+        buildings: List<Building> = ArrayList(),
+        savedBuildings: List<SavedBuildings> = ArrayList<SavedBuildings>(),
+        selectedSavedBuilding: SavedBuildings = SavedBuildings()
+    ) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
@@ -192,7 +201,8 @@ class MainActivity : ComponentActivity() {
                 )
                 TextFieldWithDropdownUsage(
                     dataIn = buildings,
-                    stringResource(R.string.buildingName)
+                    label = stringResource(R.string.buildingName),
+                    selectedSavedBuilding = selectedSavedBuilding
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
@@ -240,14 +250,14 @@ class MainActivity : ComponentActivity() {
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
-                    val studentComment = StudentComment().apply {
+                    selectedSavedBuilding.apply {
                         buildingName = inBuildingName
-                        buildingId = selectedBuilding?.let {
-                            it.buildingId
-                        } ?: 0
-                        commentContent = inComment
                     }
-                    viewModel.save(studentComment)
+                   /* val studentComment = StudentComment().apply {
+                        commentContent = inComment
+                    }*/
+                    //viewModel.save(studentComment)
+                    viewModel.saveBuilding()
                     Toast.makeText(
                         context,
                         "$inBuildingName $diningOptions $activityName",
@@ -270,7 +280,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         UptownCampusTheme {
-            BuildingName()
+            BuildingName(selectedSavedBuilding = viewModel.selectedSavedBuilding)
         }
     }
 }
