@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
+import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -199,14 +200,14 @@ class MainActivity : ComponentActivity() {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val studentComment = StudentComment().apply {
+                    val savedBuilding = SavedBuildings().apply {
                         buildingName = inBuildingName
-                        buildingId = selectedBuilding?.let {
-                            it.buildingId
-                        } ?: 0
-                        commentContent = inComment
                     }
-                    viewModel.save(studentComment)
+                   /* val studentComment = StudentComment().apply {
+                        commentContent = inComment
+                    }*/
+                    //viewModel.save(studentComment)
+                    viewModel.saveBuilding(savedBuilding)
                     Toast.makeText(
                         context,
                         "$inBuildingName $diningOptions $activityName",

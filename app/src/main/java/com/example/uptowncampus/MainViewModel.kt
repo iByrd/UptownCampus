@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
+import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
@@ -40,6 +41,18 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
         }
         studentComment.commentId = document.id
         val handle = document.set(studentComment)
+        handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
+        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
+    }
+
+    fun saveBuilding(building: SavedBuildings) {
+        val document = if (building.buildingId.isEmpty()) {
+            firestore.collection("comments").document()
+        } else {
+            firestore.collection("comments").document(building.buildingId)
+        }
+        building.buildingId = document.id
+        val handle = document.set(building)
         handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
         handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
     }
