@@ -177,7 +177,11 @@ class MainActivity : ComponentActivity() {
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column (
+            Modifier.padding(48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
             BuildingSpinner(savedBuildings = savedBuildings)
             Text ("Search and Add your UC locations", fontSize = 18.sp)
             Row (verticalAlignment = Alignment.CenterVertically) {
