@@ -33,7 +33,7 @@ import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-    private var selectedSavedBuilding by mutableStateOf(SavedBuildings())
+
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel<MainViewModel>()
     private var inBuildingName: String = ""
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName(buildings, savedBuildings, selectedSavedBuilding)
+                    BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
                 }
             }
         }
@@ -76,8 +76,18 @@ class MainActivity : ComponentActivity() {
                     savedBuildings.forEach {
                         building -> DropdownMenuItem(onClick = {
                             expanded = false
+
+                        if (building.buildingName == viewModel.NEW_BUILDING) {
+                            // for new buildings to be added to the database
+                            buildingText = ""
+                            building.buildingName = ""
+                        } else {
+                            // for existing buildings, to prevent duplication
                             buildingText = building.toString()
-                            selectedSavedBuilding = building
+                            selectedBuilding = Building(buildingId = 0, buildingName = building.buildingName)
+                            inBuildingName = building.buildingName
+                        }
+                        viewModel.selectedSavedBuilding = building
                     }) {
                             Text(text = building.toString())
                     }
@@ -240,14 +250,14 @@ class MainActivity : ComponentActivity() {
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
-                    val savedBuilding = SavedBuildings().apply {
+                    selectedSavedBuilding.apply {
                         buildingName = inBuildingName
                     }
                    /* val studentComment = StudentComment().apply {
                         commentContent = inComment
                     }*/
                     //viewModel.save(studentComment)
-                    viewModel.saveBuilding(savedBuilding)
+                    viewModel.saveBuilding()
                     Toast.makeText(
                         context,
                         "$inBuildingName $diningOptions $activityName",
@@ -270,7 +280,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         UptownCampusTheme {
-            BuildingName(selectedSavedBuilding = selectedSavedBuilding)
+            BuildingName(selectedSavedBuilding = viewModel.selectedSavedBuilding)
         }
     }
 }
