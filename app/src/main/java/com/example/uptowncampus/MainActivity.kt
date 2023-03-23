@@ -36,8 +36,9 @@ import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+    private var selectedSavedBuilding: SavedBuildings? = null
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel<MainViewModel>()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,11 +46,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             viewModel.fetchBuildings()
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
-            // dummy data for testing only - NEED TO REMOVE LATER
-            val savedBuildings = ArrayList<Building>()
-            savedBuildings.add(Building(buildingName = "Nippert Stadium"))
-            savedBuildings.add(Building(buildingName = "Rec Center"))
-            savedBuildings.add(Building(buildingName = "Fifth Third Arena"))
+            val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -63,7 +60,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingSpinner (savedBuildings : List<Building>) {
+    fun BuildingSpinner (savedBuildings : List<SavedBuildings>) {
         var buildingText by remember {(mutableStateOf("Building Collection"))}
         var expanded by remember {(mutableStateOf(false))}
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -83,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         building -> DropdownMenuItem(onClick = {
                             expanded = false
                             buildingText = building.toString()
-                            selectedBuilding = building
+                            selectedSavedBuilding = building
                     }) {
                             Text(text = building.toString())
                     }
@@ -173,7 +170,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(buildings : List<Building> = ArrayList(), savedBuildings : List<Building> = ArrayList<Building>()) {
+    fun BuildingName(buildings : List<Building> = ArrayList(), savedBuildings : List<SavedBuildings> = ArrayList<SavedBuildings>()) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
