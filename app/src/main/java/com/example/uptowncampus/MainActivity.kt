@@ -10,10 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Fastfood
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Stadium
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -206,20 +205,34 @@ class MainActivity : ComponentActivity() {
                     colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
                 )
             }
-            OutlinedTextField(
-                value = activityName,
-                onValueChange = { activityName = it },
-                label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
-            OutlinedTextField(
-                value = inComment,
-                onValueChange = { inComment = it},
-                label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Stadium,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                OutlinedTextField(
+                    value = activityName,
+                    onValueChange = { activityName = it },
+                    label = { Text(stringResource(R.string.activityName)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Comment,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                OutlinedTextField(
+                    value = inComment,
+                    onValueChange = { inComment = it },
+                    label = { Text(stringResource(R.string.comment)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
@@ -240,7 +253,7 @@ class MainActivity : ComponentActivity() {
             )
             {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Filled.Save,
                     contentDescription = "Localized description",
                     Modifier.padding(end = 8.dp)
                 )
