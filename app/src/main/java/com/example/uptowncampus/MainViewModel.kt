@@ -15,12 +15,32 @@ import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
+
+    // MB - I was trying to link data to database but we need to fix how our database is setup
+    var savedBuildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
+
     private lateinit var firestore : FirebaseFirestore
 
     init {
         firestore = FirebaseFirestore.getInstance()
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+//        listenForSavedBuildings()
     }
+
+      // MB - I was trying to link data to database but we need to fix how our database is setup
+//    private fun listenForSavedBuildings() {
+//        firestore.collection("buildings").addSnapshotListener {
+//            snapshot, e ->
+//            //handle error
+//            if (e != null) {
+//                Log.w("Listen Failed",e)
+//                return@addSnapshotListener
+//            }
+//            snapshot?.let {
+//                val allBuildings = ArrayList<Building>
+//            }
+//        }
+//    }
 
     fun fetchBuildings() {
         viewModelScope.launch {
