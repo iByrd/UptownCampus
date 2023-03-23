@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Stadium
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -16,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -173,32 +178,68 @@ class MainActivity : ComponentActivity() {
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
-        Column {
+        Column (
+            Modifier.padding(48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
             BuildingSpinner(savedBuildings = savedBuildings)
-            TextFieldWithDropdownUsage(dataIn = buildings, stringResource(R.string.buildingName))
-            OutlinedTextField(
-                value = diningOptions,
-                onValueChange = { diningOptions = it },
-                label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
-            OutlinedTextField(
-                value = activityName,
-                onValueChange = { activityName = it },
-                label = { Text(stringResource(R.string.activityName)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
-            OutlinedTextField(
-                value = inComment,
-                onValueChange = { inComment = it},
-                label = { Text(stringResource(R.string.comment))},
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
+            Text ("Search and Add your UC locations", fontSize = 18.sp)
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                TextFieldWithDropdownUsage(
+                    dataIn = buildings,
+                    stringResource(R.string.buildingName)
+                )
+            }
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Fastfood,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                OutlinedTextField(
+                    value = diningOptions,
+                    onValueChange = { diningOptions = it },
+                    label = { Text(stringResource(R.string.diningOptions)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Stadium,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                OutlinedTextField(
+                    value = activityName,
+                    onValueChange = { activityName = it },
+                    label = { Text(stringResource(R.string.activityName)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Comment,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
+                OutlinedTextField(
+                    value = inComment,
+                    onValueChange = { inComment = it },
+                    label = { Text(stringResource(R.string.comment)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                shape = CutCornerShape(10),
                 onClick = {
                     val savedBuilding = SavedBuildings().apply {
                         buildingName = inBuildingName
@@ -216,6 +257,11 @@ class MainActivity : ComponentActivity() {
                 }
             )
             {
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp)
+                )
                 Text(text = stringResource(R.string.submit))
             }
         }
