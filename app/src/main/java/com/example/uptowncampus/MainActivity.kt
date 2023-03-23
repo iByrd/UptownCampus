@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -191,13 +192,20 @@ class MainActivity : ComponentActivity() {
                     stringResource(R.string.buildingName)
                 )
             }
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Fastfood,
+                    contentDescription = "Localized description",
+                    Modifier.padding(end = 8.dp),
+                )
                 OutlinedTextField(
-                value = diningOptions,
-                onValueChange = { diningOptions = it },
-                label = { Text(stringResource(R.string.diningOptions)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
-            )
+                    value = diningOptions,
+                    onValueChange = { diningOptions = it },
+                    label = { Text(stringResource(R.string.diningOptions)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                )
+            }
             OutlinedTextField(
                 value = activityName,
                 onValueChange = { activityName = it },
