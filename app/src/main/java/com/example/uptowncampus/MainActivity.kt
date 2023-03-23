@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -31,12 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
-import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-    private var selectedSavedBuilding: SavedBuildings? = null
+    private var selectedSavedBuilding by mutableStateOf(SavedBuildings())
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel<MainViewModel>()
     private var inBuildingName: String = ""
@@ -53,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName(buildings, savedBuildings)
+                    BuildingName(buildings, savedBuildings, selectedSavedBuilding)
                 }
             }
         }
@@ -91,9 +88,9 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "") {
+    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "", selectedSavedBuilding: SavedBuildings = SavedBuildings()) {
         val dropDownOptions = remember { mutableStateOf(listOf<Building>()) }
-        val textFieldValue = remember { mutableStateOf(TextFieldValue()) }
+        val textFieldValue = remember(selectedSavedBuilding.buildingId) { mutableStateOf(TextFieldValue(selectedSavedBuilding.buildingName)) }
         val dropDownExpanded = remember { mutableStateOf(false) }
 
         fun onDropdownDismissRequest() {
@@ -170,7 +167,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BuildingName(buildings : List<Building> = ArrayList(), savedBuildings : List<SavedBuildings> = ArrayList<SavedBuildings>()) {
+    fun BuildingName(
+        buildings: List<Building> = ArrayList(),
+        savedBuildings: List<SavedBuildings> = ArrayList<SavedBuildings>(),
+        selectedSavedBuilding: SavedBuildings = SavedBuildings()
+    ) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
@@ -190,7 +191,8 @@ class MainActivity : ComponentActivity() {
                 )
                 TextFieldWithDropdownUsage(
                     dataIn = buildings,
-                    stringResource(R.string.buildingName)
+                    label = stringResource(R.string.buildingName),
+                    selectedSavedBuilding = selectedSavedBuilding
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
@@ -268,7 +270,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         UptownCampusTheme {
-            BuildingName()
+            BuildingName(selectedSavedBuilding = selectedSavedBuilding)
         }
     }
 }
