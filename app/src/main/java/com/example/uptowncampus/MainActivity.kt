@@ -1,6 +1,7 @@
 package com.example.uptowncampus
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,10 +31,15 @@ import androidx.compose.ui.window.PopupProperties
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
+    private var user: FirebaseUser? = null
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel<MainViewModel>()
     private var inBuildingName: String = ""
@@ -294,7 +300,22 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun signIn() {
-
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build()
+        )
+        val signinIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
     }
 
+
+    private fun signInResult(result: FirebaseAuthUIAuthenticationResult){
+        val response = result.idpResponse
+        if(result.resultCode == RESULT_OK){
+            user = FirebaseAuth.getInstance().currentUser
+        } else{
+            Log.e("MainActivity.kt", "Error logging in" + response?.error?.errorCode)
+        }
+    }
 }
