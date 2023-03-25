@@ -273,8 +273,18 @@ class MainActivity : ComponentActivity() {
                 )
                 Text(text = stringResource(R.string.submit))
             }
+            Button(
+                onClick = {
+                    signIn()
+                }
+            )
+            {
+                Text(text = "Logon")
+            }
         }
     }
+
+
 
     @Preview(showBackground = true)
     @Composable
@@ -283,4 +293,8 @@ class MainActivity : ComponentActivity() {
             BuildingName(selectedSavedBuilding = viewModel.selectedSavedBuilding)
         }
     }
+    private fun signIn() {
+
+    }
+
 }
