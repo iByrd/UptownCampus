@@ -25,7 +25,7 @@ class BuildingTests {
     var rule: TestRule = InstantTaskExecutorRule()
 
     lateinit var buildingService : BuildingService
-    var allBuildings : List<Building>? = ArrayList<Building>()
+    var allBuildings : List<Building>? = ArrayList()
 
     @Test
     fun `Given building data is available when I search for Teacher then I should receive Teacher Dyer` () = runTest {
