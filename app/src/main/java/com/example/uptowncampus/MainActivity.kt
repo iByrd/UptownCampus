@@ -63,33 +63,6 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TopToolBar() {
-        Column {
-            TopAppBar(title = {
-                Text(
-                    text = "Uptown Campus", fontSize = 25.sp, fontWeight = FontWeight.Bold
-                )
-            }, actions = {
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 10.dp)){
-                    Button(
-                        onClick = {
-                            signIn()
-                        }
-                    )
-                    {
-                        Icon(
-                            Icons.Filled.Person,
-                            contentDescription = "User Icon",
-                            Modifier.padding(end = 8.dp)
-                        )
-                        Text(text = "Login")
-                    }
-                }
-            })
-        }
-    }
-
-    @Composable
     fun BuildingSpinner (savedBuildings : List<SavedBuildings>) {
         var buildingText by remember {(mutableStateOf("Select Building"))}
         var expanded by remember {(mutableStateOf(false))}
@@ -223,10 +196,6 @@ class MainActivity : ComponentActivity() {
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
 
-        Column {
-            TopToolBar()
-        }
-
         Column (
             Modifier.padding(48.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -323,6 +292,19 @@ class MainActivity : ComponentActivity() {
                     Modifier.padding(end = 8.dp)
                 )
                 Text(text = stringResource(R.string.submit))
+            }
+            Button(
+                onClick = {
+                    signIn()
+                }
+            )
+            {
+                Icon(
+                    Icons.Filled.Person,
+                    contentDescription = "User Icon",
+                    Modifier.padding(end = 8.dp)
+                )
+                Text(text = "Login")
             }
         }
     }
