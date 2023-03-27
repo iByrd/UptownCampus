@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BuildingName(
         buildings: List<Building> = ArrayList(),
-        savedBuildings: List<SavedBuildings> = ArrayList<SavedBuildings>(),
+        savedBuildings: List<SavedBuildings> = ArrayList(),
         selectedSavedBuilding: SavedBuildings = SavedBuildings()
     ) {
         var diningOptions by remember { mutableStateOf("") }
