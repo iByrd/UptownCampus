@@ -260,10 +260,6 @@ class MainActivity : ComponentActivity() {
                     selectedSavedBuilding.apply {
                         buildingName = inBuildingName
                     }
-                   /* val studentComment = StudentComment().apply {
-                        commentContent = inComment
-                    }*/
-                    //viewModel.save(studentComment)
                     viewModel.saveBuilding()
                     Toast.makeText(
                         context,
