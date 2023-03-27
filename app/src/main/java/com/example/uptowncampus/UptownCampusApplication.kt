@@ -7,7 +7,6 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.logger.Level
 
 class UptownCampusApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
 
