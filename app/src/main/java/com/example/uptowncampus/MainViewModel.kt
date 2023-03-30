@@ -9,24 +9,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
-import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import org.json.JSONException
 
-class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
+@Suppress("UNNECESSARY_SAFE_CALL")
+class MainViewModel(private var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
-    internal val NEW_BUILDING = "New Building"
+    internal val newbUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
 
     var savedBuildings: MutableLiveData<List<SavedBuildings>> = MutableLiveData<List<SavedBuildings>>()
     var selectedSavedBuilding by mutableStateOf(SavedBuildings())
 
-    private lateinit var firestore : FirebaseFirestore
+    private var firestore : FirebaseFirestore
 
     init {
         firestore = FirebaseFirestore.getInstance()
@@ -45,7 +44,7 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
             }
             snapshot?.let {
                 val allBuildings = ArrayList<SavedBuildings>()
-                allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING))
+                allBuildings.add(SavedBuildings(buildingName = newbUILDING))
                 val documents = snapshot.documents
                 documents.forEach {
                     val building = it.toObject(SavedBuildings::class.java)
@@ -82,7 +81,7 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 //    }
 
     fun saveBuilding() {
-        val document = if (selectedSavedBuilding.buildingId.isEmpty() || selectedSavedBuilding.buildingId == null) {
+        val document = if (selectedSavedBuilding?.buildingId.isNullOrEmpty()) {
             firestore.collection("buildings").document()
         } else {
             firestore.collection("buildings").document(selectedSavedBuilding.buildingId)
