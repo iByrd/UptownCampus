@@ -49,15 +49,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             viewModel.fetchBuildings()
-            val buildings by viewModel.buildings.observeAsState(initial = emptyList())
-            val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
+            val Buildings by viewModel.buildings.observeAsState(initial = emptyList())
+            val SavedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colors.background,
                 ) {
-                    BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
+                    BuildingName(Buildings, SavedBuildings, viewModel.selectedSavedBuilding)
                 }
             }
         }
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
                 }
                 .padding(8.dp),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = buildingText, fontSize = 24.sp, modifier = Modifier.padding(end = 8.dp), fontWeight = FontWeight.Bold)
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
             onDismissRequest = ::onDropdownDismissRequest,
             dropDownExpanded = dropDownExpanded.value,
             list = dropDownOptions.value,
-            label = label
+            label = label,
         )
     }
 
@@ -155,7 +155,7 @@ class MainActivity : ComponentActivity() {
                 value = value,
                 onValueChange = setValue,
                 label = { Text(label) },
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White),
             )
             DropdownMenu(
                 expanded = dropDownExpanded,
@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BuildingName(
         buildings: List<Building> = ArrayList(),
-        savedBuildings: List<SavedBuildings> = ArrayList<SavedBuildings>(),
+        savedBuildings: List<SavedBuildings> = ArrayList(),
         selectedSavedBuilding: SavedBuildings = SavedBuildings()
     ) {
         var diningOptions by remember { mutableStateOf("") }
@@ -223,7 +223,7 @@ class MainActivity : ComponentActivity() {
                     onValueChange = { diningOptions = it },
                     label = { Text(stringResource(R.string.diningOptions)) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White),
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
@@ -301,15 +301,15 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun signIn() {
-        val providers = arrayListOf(
+        val Providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
-        val signinIntent = AuthUI.getInstance()
+        val SigninIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
+            .setAvailableProviders(Providers)
             .build()
 
-        signInLauncher.launch(signinIntent)
+        signInLauncher.launch(SigninIntent)
     }
 
     private val signInLauncher = registerForActivityResult (
