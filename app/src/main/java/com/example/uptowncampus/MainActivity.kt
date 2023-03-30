@@ -49,15 +49,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             viewModel.fetchBuildings()
-            val buildings by viewModel.buildings.observeAsState(initial = emptyList())
-            val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
+            val Buildings by viewModel.buildings.observeAsState(initial = emptyList())
+            val SavedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
+                    BuildingName(Buildings, SavedBuildings, viewModel.selectedSavedBuilding)
                 }
             }
         }
@@ -301,15 +301,15 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun signIn() {
-        val providers = arrayListOf(
+        val Providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
-        val signinIntent = AuthUI.getInstance()
+        val SigninIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
+            .setAvailableProviders(Providers)
             .build()
 
-        signInLauncher.launch(signinIntent)
+        signInLauncher.launch(SigninIntent)
     }
 
     private val signInLauncher = registerForActivityResult (
