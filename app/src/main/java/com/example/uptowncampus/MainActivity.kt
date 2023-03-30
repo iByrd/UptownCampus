@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
         Column {
             TopAppBar(title = {
                 Text(
-                    text = "Uptown Campus", fontSize = 25.sp, fontWeight = FontWeight.Bold
+                    text = stringResource(R.string.topBarTitle), fontSize = 25.sp, fontWeight = FontWeight.Bold
                 )
             }, actions = {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 10.dp)){
@@ -79,10 +79,10 @@ class MainActivity : ComponentActivity() {
                     {
                         Icon(
                             Icons.Filled.Person,
-                            contentDescription = "User Icon",
+                            contentDescription = stringResource(R.string.userIcon),
                             Modifier.padding(end = 8.dp)
                         )
-                        Text(text = "Login")
+                        Text(text = stringResource(R.string.loginLabel))
                     }
                 }
             })
@@ -233,7 +233,7 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             BuildingSpinner(savedBuildings = savedBuildings)
-            Text ("Search and Add your UC locations", fontSize = 18.sp)
+            Text (stringResource(R.string.descriptionLabel), fontSize = 18.sp)
             Row (verticalAlignment = Alignment.CenterVertically) {
                 TextFieldWithDropdownUsage(
                     dataIn = buildings,
@@ -242,7 +242,7 @@ class MainActivity : ComponentActivity() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Home,
-                            contentDescription = "Building Icon",
+                            contentDescription = stringResource(R.string.buildingIconDescription),
                             Modifier.padding(end = 8.dp),
                             tint = Color.Black
                         )
@@ -259,7 +259,7 @@ class MainActivity : ComponentActivity() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Fastfood,
-                            contentDescription = "Dining Icon",
+                            contentDescription = stringResource(R.string.diningIconDescription),
                             Modifier.padding(end = 8.dp),
                             tint = Color.Black
                         )
@@ -276,7 +276,7 @@ class MainActivity : ComponentActivity() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Stadium,
-                            contentDescription = "Stadium Icon",
+                            contentDescription = stringResource(R.string.stadiumIconDescription),
                             Modifier.padding(end = 8.dp),
                             tint = Color.Black
                         )
@@ -294,7 +294,7 @@ class MainActivity : ComponentActivity() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Comment,
-                            contentDescription = "Comment Icon",
+                            contentDescription = stringResource(R.string.commentIconDescription),
                             Modifier.padding(end = 8.dp),
                             tint = Color.Black
                         )
@@ -319,7 +319,7 @@ class MainActivity : ComponentActivity() {
             {
                 Icon(
                     imageVector = Icons.Filled.Save,
-                    contentDescription = "Save Button Icon",
+                    contentDescription = stringResource(R.string.saveButtonDescription),
                     Modifier.padding(end = 8.dp)
                 )
                 Text(text = stringResource(R.string.submit))

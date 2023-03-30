@@ -6,4 +6,13 @@
     <string name="buildingNameLabel">Building Name</string>
     <string name="comment">Comment</string>
     <string name="submit">Submit</string>
+    <string name="saveButtonDescription">Save Button Icon</string>
+    <string name="commentIconDescription">Comment Icon</string>
+    <string name="stadiumIconDescription">Stadium Icon</string>
+    <string name="diningIconDescription">Dining Icon</string>
+    <string name="buildingIconDescription">Building Icon</string>
+    <string name="topBarTitle">Uptown Campus</string>
+    <string name="userIcon">User Icon</string>
+    <string name="loginLabel">Login</string>
+    <string name="descriptionLabel">Search and Add your UC locations</string>
 </resources>
