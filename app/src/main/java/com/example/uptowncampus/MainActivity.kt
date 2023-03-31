@@ -67,9 +67,9 @@ class MainActivity : ComponentActivity() {
     fun BuildingSpinner (savedBuildings : List<SavedBuildings>) {
         var buildingText by remember {(mutableStateOf("Building Collection"))}
         var expanded by remember {(mutableStateOf(false))}
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
             Row(Modifier
-                .padding(24.dp)
+                .padding(2.dp)
                 .clickable {
                     expanded = !expanded
                 }
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = buildingText, fontSize = 24.sp, modifier = Modifier.padding(end = 8.dp), fontWeight = FontWeight.Bold)
+                Text(text = buildingText, fontSize = 28.sp, modifier = Modifier.padding(end = 8.dp), fontWeight = FontWeight.Bold)
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     savedBuildings.forEach {
@@ -199,7 +199,7 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             BuildingSpinner(savedBuildings = savedBuildings)
-            Text ("Search and Add your UC locations", fontSize = 24.sp, fontWeight = FontWeight.Bold )
+            Text ("Search and Add your UC locations", fontSize = 15.sp, fontWeight = FontWeight.Bold )
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.Home,
