@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                         building -> DropdownMenuItem(onClick = {
                             expanded = false
 
-                        if (building.buildingName == viewModel.NEW_BUILDING) {
+                        if (building.buildingName == viewModel.newbUILDING) {
                             // for new buildings to be added to the database
                             buildingText = ""
                             building.buildingName = ""
