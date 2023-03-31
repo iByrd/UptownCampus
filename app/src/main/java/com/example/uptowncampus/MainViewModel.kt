@@ -7,12 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.uptowncampus.dto.Building
-import com.example.uptowncampus.dto.SavedBuildings
-import com.example.uptowncampus.service.BuildingService
-import com.example.uptowncampus.service.IBuildingService
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.example.uptowncampus.dto.*
+import com.example.uptowncampus.service.*
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
 import org.json.JSONException
 
