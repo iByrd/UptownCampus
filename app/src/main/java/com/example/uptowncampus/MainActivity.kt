@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -304,12 +304,12 @@ class MainActivity : ComponentActivity() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
-        val signinIntent = AuthUI.getInstance()
+        val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
 
-        signInLauncher.launch(signinIntent)
+        signInLauncher.launch(signInIntent)
     }
 
     private val signInLauncher = registerForActivityResult (

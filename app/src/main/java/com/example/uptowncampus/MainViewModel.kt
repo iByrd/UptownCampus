@@ -9,13 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
-import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
