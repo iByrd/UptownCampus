@@ -49,15 +49,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             viewModel.fetchBuildings()
-            val Buildings by viewModel.buildings.observeAsState(initial = emptyList())
-            val SavedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
+            val buildings by viewModel.buildings.observeAsState(initial = emptyList())
+            val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
                 ) {
-                    BuildingName(Buildings, SavedBuildings, viewModel.selectedSavedBuilding)
+                    BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
                 }
             }
         }
@@ -199,7 +199,7 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             BuildingSpinner(savedBuildings = savedBuildings)
-            Text ("Search and Add your UC locations", fontSize = 18.sp)
+            Text ("Search and Add your UC locations", fontSize = 24.sp, fontWeight = FontWeight.Bold )
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.Home,
@@ -301,15 +301,15 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun signIn() {
-        val Providers = arrayListOf(
+        val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
-        val SigninIntent = AuthUI.getInstance()
+        val signinIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
-            .setAvailableProviders(Providers)
+            .setAvailableProviders(providers)
             .build()
 
-        signInLauncher.launch(SigninIntent)
+        signInLauncher.launch(signinIntent)
     }
 
     private val signInLauncher = registerForActivityResult (
