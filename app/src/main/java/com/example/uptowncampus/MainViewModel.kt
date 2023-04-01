@@ -32,7 +32,7 @@ class MainViewModel(private var BuildingService : IBuildingService? = BuildingSe
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         listenForSavedBuildings()
     }
-
+    private val NEW_BUILDING_NAME = "New Building"
       // MB - I was trying to link data to database but we need to fix how our database is setup
     private fun listenForSavedBuildings() {
         firestore.collection("buildings").addSnapshotListener {
@@ -44,7 +44,7 @@ class MainViewModel(private var BuildingService : IBuildingService? = BuildingSe
             }
             snapshot?.let {
                 val allBuildings = ArrayList<SavedBuildings>()
-                allBuildings.add(SavedBuildings(buildingName = newbUILDING))
+                allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING_NAME ))
                 val documents = snapshot.documents
                 documents.forEach {
                     val building = it.toObject(SavedBuildings::class.java)
