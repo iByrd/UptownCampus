@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 
 @Suppress("UNNECESSARY_SAFE_CALL")
-class MainViewModel(private var BuildingService : IBuildingService = BuildingService()) : ViewModel() {
+class MainViewModel(private var BuildingService : IBuildingService? = BuildingService()) : ViewModel() {
 
     internal val newbUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
@@ -60,7 +60,7 @@ class MainViewModel(private var BuildingService : IBuildingService = BuildingSer
     fun fetchBuildings() {
         viewModelScope.launch {
             try{
-                buildings.postValue(BuildingService.fetchBuilding())
+                buildings.postValue(BuildingService?.fetchBuilding())
             } catch(e: JSONException){
                 Log.e("buildingService", "Failed to fetch buildings")
             }
@@ -86,7 +86,7 @@ class MainViewModel(private var BuildingService : IBuildingService = BuildingSer
         } else {
             firestore.collection("buildings").document(selectedSavedBuilding.buildingId)
         }
-        selectedSavedBuilding.buildingId = document.id
+        selectedSavedBuilding?.buildingId = document.id
         val handle = document.set(selectedSavedBuilding)
         handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
         handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}

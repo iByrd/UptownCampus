@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -39,7 +40,7 @@ import com.google.firebase.auth.FirebaseUser
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
-
+    private var currentTab by mutableStateOf(0)
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel<MainViewModel>()
@@ -48,10 +49,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             viewModel.fetchBuildings()
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
             val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
+
             UptownCampusTheme {
+
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -59,6 +64,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     BuildingName(buildings, savedBuildings, viewModel.selectedSavedBuilding)
                 }
+
             }
         }
     }
@@ -102,6 +108,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 
     @Composable
@@ -121,6 +128,7 @@ class MainActivity : ComponentActivity() {
             dropDownOptions.value = dataIn.filter {
                 it.toString().contains(value.text,true) && it.toString() != value.text
             }.sortedBy { it.toString().indexOf(value.text, 0, true) }.take(3)
+
         }
 
         TextFieldWithDropdown(
