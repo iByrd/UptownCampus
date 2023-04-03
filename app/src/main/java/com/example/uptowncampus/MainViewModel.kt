@@ -62,20 +62,7 @@ class MainViewModel(private val buildingService: BuildingService) : ViewModel() 
             }
         }
     }
-
-    // -RS- Commented out this function for when the database has been restructured.
-//    fun save(studentComment: StudentComment) {
-//        val document = if (studentComment.commentId.isEmpty()) {
-//            firestore.collection("comments").document()
-//        } else {
-//            firestore.collection("comments").document(studentComment.commentId)
-//        }
-//        studentComment.commentId = document.id
-//        val handle = document.set(studentComment)
-//        handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
-//        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
-//    }
-
+    
     fun saveBuilding() {
         val document = if (selectedSavedBuilding.buildingId.isEmpty() || selectedSavedBuilding.buildingId == null) {
             firestore.collection("buildings").document()
