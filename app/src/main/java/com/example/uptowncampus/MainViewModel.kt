@@ -13,7 +13,7 @@ import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
 import org.json.JSONException
 
-class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
+class MainViewModel(private val buildingService: BuildingService) : ViewModel() {
 
     internal val NEW_BUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
