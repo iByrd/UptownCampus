@@ -203,7 +203,7 @@ class MainActivity : ComponentActivity() {
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.Home,
-                    contentDescription = "Localized description",
+                    contentDescription = "Home Icon",
                     Modifier.padding(end = 8.dp),
                 )
                 TextFieldWithDropdownUsage(
@@ -215,7 +215,7 @@ class MainActivity : ComponentActivity() {
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.Fastfood,
-                    contentDescription = "Localized description",
+                    contentDescription = "Food Icon ",
                     Modifier.padding(end = 8.dp),
                 )
                 OutlinedTextField(
@@ -229,7 +229,7 @@ class MainActivity : ComponentActivity() {
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Outlined.Stadium,
-                    contentDescription = "Localized description",
+                    contentDescription = "Stadium Icon ",
                     Modifier.padding(end = 8.dp),
                 )
                 OutlinedTextField(
@@ -243,7 +243,7 @@ class MainActivity : ComponentActivity() {
             Row (verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Outlined.Comment,
-                    contentDescription = "Localized description",
+                    contentDescription = "Comment Icon",
                     Modifier.padding(end = 8.dp),
                 )
                 OutlinedTextField(
@@ -257,36 +257,34 @@ class MainActivity : ComponentActivity() {
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
+                    if(inBuildingName.isNotEmpty()){
                     selectedSavedBuilding.apply {
                         buildingName = inBuildingName
                     }
-                   /* val studentComment = StudentComment().apply {
-                        commentContent = inComment
-                    }*/
-                    //viewModel.save(studentComment)
                     viewModel.saveBuilding()
                     Toast.makeText(
                         context,
                         "$inBuildingName $diningOptions $activityName",
                         Toast.LENGTH_LONG
                     ).show()
+                    }
                 }
             )
             {
                 Icon(
                     imageVector = Icons.Filled.Save,
-                    contentDescription = "Localized description",
+                    contentDescription = "Submit Button",
                     Modifier.padding(end = 8.dp)
                 )
                 Text(text = stringResource(R.string.submit))
             }
             Button(
                 onClick = {
-                    signIn()
+                        signIn()
                 }
             )
             {
-                Text(text = "Logon")
+                Text(text = "Sign In")
             }
         }
     }

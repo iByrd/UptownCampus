@@ -9,13 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
-import com.example.uptowncampus.dto.StudentComment
 import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
@@ -67,19 +65,6 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
             }
         }
     }
-
-    // -RS- Commented out this function for when the database has been restructured.
-//    fun save(studentComment: StudentComment) {
-//        val document = if (studentComment.commentId.isEmpty()) {
-//            firestore.collection("comments").document()
-//        } else {
-//            firestore.collection("comments").document(studentComment.commentId)
-//        }
-//        studentComment.commentId = document.id
-//        val handle = document.set(studentComment)
-//        handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
-//        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
-//    }
 
     fun saveBuilding() {
         val document = if (selectedSavedBuilding.buildingId.isEmpty() || selectedSavedBuilding.buildingId == null) {
