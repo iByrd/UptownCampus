@@ -8,6 +8,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
+/**
+ * A service for fetching building data from a remote data source.
+ *
+ * Fetches a list of buildings from the remote data source.
+ * @return A list of [Building] objects, or null if the fetch fails.
+ */
 interface IBuildingService {
     suspend fun fetchBuilding() : List<Building>?
 }
