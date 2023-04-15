@@ -12,6 +12,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Fastfood
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Stadium
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
-    private val viewModel: MainViewModel by viewModel<MainViewModel>()
+    private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,16 +66,46 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
+    fun TopToolBar() {
+        Column {
+            TopAppBar(title = {
+                Text(
+                    text = "Uptown Campus", fontSize = 25.sp, fontWeight = FontWeight.Bold
+                )
+            }, actions = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 10.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            signIn()
+                        }
+                    )
+                    {
+                        Icon(
+                            Icons.Filled.Person,
+                            contentDescription = "User Icon",
+                            Modifier.padding(end = 8.dp)
+                        )
+                        Text(text = "Login")
+                    }
+                }
+            })
+        }
+    }
+
+    @Composable
     fun BuildingSpinner (savedBuildings : List<SavedBuildings>) {
-        var buildingText by remember {(mutableStateOf("Building Collection"))}
+        var buildingText by remember {(mutableStateOf("Select Building"))}
         var expanded by remember {(mutableStateOf(false))}
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Row(Modifier
-                .padding(24.dp)
+                .padding(22.dp)
                 .clickable {
                     expanded = !expanded
                 }
-                .padding(8.dp),
+                .padding(1.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -105,7 +137,9 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "", selectedSavedBuilding: SavedBuildings = SavedBuildings()) {
+    fun TextFieldWithDropdownUsage(dataIn: List<Building>, label: String = "",
+                                   selectedSavedBuilding: SavedBuildings = SavedBuildings(),
+                                   leadingIcon: @Composable (() -> Unit)? = null) {
         val dropDownOptions = remember { mutableStateOf(listOf<Building>()) }
         val textFieldValue = remember(selectedSavedBuilding.buildingId) { mutableStateOf(TextFieldValue(selectedSavedBuilding.buildingName)) }
         val dropDownExpanded = remember { mutableStateOf(false) }
@@ -130,7 +164,8 @@ class MainActivity : ComponentActivity() {
             onDismissRequest = ::onDropdownDismissRequest,
             dropDownExpanded = dropDownExpanded.value,
             list = dropDownOptions.value,
-            label = label
+            label = label,
+            leadingIcon = leadingIcon
         )
     }
 
@@ -142,7 +177,8 @@ class MainActivity : ComponentActivity() {
         onDismissRequest: () -> Unit,
         dropDownExpanded: Boolean,
         list: List<Building>,
-        label: String = ""
+        label: String = "",
+        leadingIcon: @Composable (() -> Unit)? = null
     ) {
         Box(modifier) {
             TextField(
@@ -155,7 +191,8 @@ class MainActivity : ComponentActivity() {
                 value = value,
                 onValueChange = setValue,
                 label = { Text(label) },
-                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White),
+                leadingIcon = { leadingIcon?.invoke()}
             )
             DropdownMenu(
                 expanded = dropDownExpanded,
@@ -186,13 +223,18 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BuildingName(
         buildings: List<Building> = ArrayList(),
-        savedBuildings: List<SavedBuildings> = ArrayList<SavedBuildings>(),
+        savedBuildings: List<SavedBuildings> = ArrayList(),
         selectedSavedBuilding: SavedBuildings = SavedBuildings()
     ) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
         val context = LocalContext.current
+
+        Column {
+            TopToolBar()
+        }
+
         Column (
             Modifier.padding(48.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -201,56 +243,68 @@ class MainActivity : ComponentActivity() {
             BuildingSpinner(savedBuildings = savedBuildings)
             Text ("Search and Add your UC locations", fontSize = 18.sp)
             Row (verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = "Localized description",
-                    Modifier.padding(end = 8.dp),
-                )
                 TextFieldWithDropdownUsage(
                     dataIn = buildings,
                     label = stringResource(R.string.buildingName),
-                    selectedSavedBuilding = selectedSavedBuilding
+                    selectedSavedBuilding = selectedSavedBuilding,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Home,
+                            contentDescription = "Building Icon",
+                            Modifier.padding(end = 8.dp),
+                            tint = Color.Black
+                        )
+                    }
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Fastfood,
-                    contentDescription = "Localized description",
-                    Modifier.padding(end = 8.dp),
-                )
                 OutlinedTextField(
                     value = diningOptions,
                     onValueChange = { diningOptions = it },
                     label = { Text(stringResource(R.string.diningOptions)) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White),
+                            leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Fastfood,
+                            contentDescription = "Dining Icon",
+                            Modifier.padding(end = 8.dp),
+                            tint = Color.Black
+                        )
+                    },
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Outlined.Stadium,
-                    contentDescription = "Localized description",
-                    Modifier.padding(end = 8.dp),
-                )
                 OutlinedTextField(
                     value = activityName,
                     onValueChange = { activityName = it },
                     label = { Text(stringResource(R.string.activityName)) },
                     modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Stadium,
+                            contentDescription = "Stadium Icon",
+                            Modifier.padding(end = 8.dp),
+                            tint = Color.Black
+                        )
+                    },
                     colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
                 )
             }
             Row (verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Outlined.Comment,
-                    contentDescription = "Localized description",
-                    Modifier.padding(end = 8.dp),
-                )
                 OutlinedTextField(
                     value = inComment,
                     onValueChange = { inComment = it },
                     label = { Text(stringResource(R.string.comment)) },
                     modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Comment,
+                            contentDescription = "Comment Icon",
+                            Modifier.padding(end = 8.dp),
+                            tint = Color.Black
+                        )
+                    },
                     colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
                 )
             }
@@ -275,23 +329,13 @@ class MainActivity : ComponentActivity() {
             {
                 Icon(
                     imageVector = Icons.Filled.Save,
-                    contentDescription = "Localized description",
+                    contentDescription = "Save Button Icon",
                     Modifier.padding(end = 8.dp)
                 )
                 Text(text = stringResource(R.string.submit))
             }
-            Button(
-                onClick = {
-                    signIn()
-                }
-            )
-            {
-                Text(text = "Logon")
-            }
         }
     }
-
-
 
     @Preview(showBackground = true)
     @Composable
