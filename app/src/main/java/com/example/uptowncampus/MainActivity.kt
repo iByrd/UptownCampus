@@ -2,6 +2,7 @@ package com.example.uptowncampus
 
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -42,9 +43,14 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : ComponentActivity() {
 
+    private var currentImagePath: String = ""
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
@@ -384,6 +390,18 @@ class MainActivity : ComponentActivity() {
     }
     private fun invokeCamera() {
         TODO("Not yet implemented")
+    }
+
+    private fun createImageFile() : File {
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "Building_${timestamp}",
+            ".jpg",
+                imageDirectory
+        ).apply {
+            currentImagePath = absolutePath
+        }
     }
 
     //Possible issue with android.Manifest
