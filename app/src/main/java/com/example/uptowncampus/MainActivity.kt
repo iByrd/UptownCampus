@@ -1,10 +1,12 @@
 package com.example.uptowncampus
 
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -30,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
+import androidx.core.content.ContextCompat
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
@@ -333,6 +336,19 @@ class MainActivity : ComponentActivity() {
                     Modifier.padding(end = 8.dp)
                 )
                 Text(text = stringResource(R.string.submit))
+            }
+            Button(
+                shape = CutCornerShape(10),
+                onClick = {
+                    takePhoto()
+                }
+            ){
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = "Photo Button Icon",
+                    Modifier.padding(end = 8.dp)
+                )
+                Text(text = "photo")
             }
         }
     }

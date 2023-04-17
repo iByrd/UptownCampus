@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.dto.StudentComment
-import com.example.uptowncampus.service.BuildingService
-import com.example.uptowncampus.service.IBuildingService
+import com.example.uptowncampus.ui.theme.service.BuildingService
+import com.example.uptowncampus.ui.theme.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.launch
