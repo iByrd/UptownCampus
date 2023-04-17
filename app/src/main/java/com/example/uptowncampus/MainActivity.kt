@@ -1,6 +1,8 @@
 package com.example.uptowncampus
 
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
@@ -50,6 +53,7 @@ import kotlin.collections.ArrayList
 
 class MainActivity : ComponentActivity() {
 
+    private var uri: Uri? = null
     private var currentImagePath: String = ""
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
@@ -389,7 +393,14 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun invokeCamera() {
-        TODO("Not yet implemented")
+        val file = createImageFile()
+        try {
+            uri = FileProvider.getUriForFile(this, "com.example.uptowncampus.fileprovider", file)
+        } catch (e: Exception){
+            Log.e(TAG, "Error: ${e.message}")
+            var foo = e.message
+        }
+        uri = FileProvider.getUriForFile(this, "com.example.uptowncampus", file)
     }
 
     private fun createImageFile() : File {
