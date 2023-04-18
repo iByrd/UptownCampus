@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
+    private var strUri by mutableStateOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -360,6 +362,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Text(text = "photo")
             }
+            AsyncImage(model = strUri, contentDescription = "Building Image")
         }
     }
 
@@ -396,11 +399,11 @@ class MainActivity : ComponentActivity() {
         val file = createImageFile()
         try {
             uri = FileProvider.getUriForFile(this, "com.example.uptowncampus.fileprovider", file)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e(TAG, "Error: ${e.message}")
             var foo = e.message
         }
-        uri = FileProvider.getUriForFile(this, "com.example.uptowncampus", file)
+        getCameraImage.launch(uri)
     }
 
     private fun createImageFile() : File {
@@ -412,6 +415,16 @@ class MainActivity : ComponentActivity() {
                 imageDirectory
         ).apply {
             currentImagePath = absolutePath
+        }
+    }
+
+    private val getCameraImage = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        success ->
+        if (success) {
+            Log.i(TAG, "Image Location: $uri")
+            strUri = uri.toString()
+        } else {
+            Log.e(TAG, "Image not saved: $uri")
         }
     }
 
