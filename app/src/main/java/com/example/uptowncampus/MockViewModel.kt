@@ -8,7 +8,7 @@ import com.example.uptowncampus.service.BuildingService
 import com.example.uptowncampus.service.IBuildingService
 import kotlinx.coroutines.launch
 
-class MockViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
+class MockViewModel (var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
 

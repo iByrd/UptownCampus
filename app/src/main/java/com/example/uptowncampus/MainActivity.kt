@@ -87,10 +87,10 @@ class MainActivity : ComponentActivity() {
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     savedBuildings.forEach {
-                        building -> DropdownMenuItem(onClick = {
-                            expanded = false
+                            building -> DropdownMenuItem(onClick = {
+                        expanded = false
 
-                        if (building.buildingName == viewModel.newbUILDING) {
+                        if (building.buildingName == viewModel.NEW_BUILDING_NAME) {
                             // for new buildings to be added to the database
                             buildingText = ""
                             building.buildingName = ""
@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         }
                         viewModel.selectedSavedBuilding = building
                     }) {
-                            Text(text = building.toString())
+                        Text(text = building.toString())
                     }
                     }
                 }
@@ -197,6 +197,7 @@ class MainActivity : ComponentActivity() {
         savedBuildings: List<SavedBuildings> = ArrayList(),
         selectedSavedBuilding: SavedBuildings = SavedBuildings()
     ) {
+
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
         var inComment by remember { mutableStateOf("") }
@@ -268,9 +269,9 @@ class MainActivity : ComponentActivity() {
                     selectedSavedBuilding.apply {
                         buildingName = inBuildingName
                     }
-                   /* val studentComment = StudentComment().apply {
-                        commentContent = inComment
-                    }*/
+                    /* val studentComment = StudentComment().apply {
+                         commentContent = inComment
+                     }*/
                     //viewModel.save(studentComment)
                     viewModel.saveBuilding()
                     Toast.makeText(
@@ -322,8 +323,8 @@ class MainActivity : ComponentActivity() {
 
     private val signInLauncher = registerForActivityResult (
         FirebaseAuthUIActivityResultContract()
-            ){
-        res -> this.signInResult(res)
+    ){
+            res -> this.signInResult(res)
     }
 
 

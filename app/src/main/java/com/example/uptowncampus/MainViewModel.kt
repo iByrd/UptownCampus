@@ -17,22 +17,21 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 
 @Suppress("UNNECESSARY_SAFE_CALL")
-class MainViewModel(private var BuildingService : IBuildingService? = BuildingService()) : ViewModel() {
+class MainViewModel(private var BuildingService : IBuildingService? = null) : ViewModel() {
 
     internal val newbUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
 
     var savedBuildings: MutableLiveData<List<SavedBuildings>> = MutableLiveData<List<SavedBuildings>>()
     var selectedSavedBuilding by mutableStateOf(SavedBuildings())
+    private val firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    private var firestore : FirebaseFirestore
 
     init {
-        firestore = FirebaseFirestore.getInstance()
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         listenForSavedBuildings()
     }
-    private val NEW_BUILDING_NAME = "New Building"
+    val NEW_BUILDING_NAME = "New Building"
       // MB - I was trying to link data to database but we need to fix how our database is setup
     private fun listenForSavedBuildings() {
         firestore.collection("buildings").addSnapshotListener {
