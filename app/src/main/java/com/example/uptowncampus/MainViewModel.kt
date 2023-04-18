@@ -45,13 +45,11 @@ class MainViewModel(private var BuildingService : IBuildingService? = null) : Vi
                 val allBuildings = ArrayList<SavedBuildings>()
                 allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING_NAME ))
                 val documents = snapshot.documents
-                documents.forEach {
-                    val building = it.toObject(SavedBuildings::class.java)
-                    building?.let {
-                        allBuildings.add(it)
+                for (document in it.documents) {
+                    val building = document.toObject(SavedBuildings::class.java)
+                    building?.let { allBuildings.add(it) }
                     }
-                }
-                savedBuildings.value = allBuildings
+            savedBuildings.value = allBuildings
             }
         }
     }
