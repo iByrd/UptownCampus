@@ -333,8 +333,13 @@ class MainActivity : ComponentActivity() {
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
-                    selectedSavedBuilding.apply {
+                    viewModel.selectedSavedBuilding.apply {
                         buildingName = inBuildingName
+                        buildingId = selectedBuilding?.let {
+                            it.buildingId
+                        } ?: 0
+                        comment = inComment
+
                     }
                    /* val studentComment = StudentComment().apply {
                         commentContent = inComment
