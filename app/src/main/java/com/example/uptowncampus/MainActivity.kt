@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.example.uptowncampus.dto.Building
+import com.example.uptowncampus.dto.Photo
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.dto.User
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
@@ -56,7 +57,7 @@ import kotlin.collections.ArrayList
 class MainActivity : ComponentActivity() {
 
     private var uri: Uri? = null
-    private var currentImagePath: String = ""
+    private lateinit var currentImagePath: String
     private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
@@ -383,23 +384,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private val requestMultiplePermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        resultsMap ->
-        var permissionGranted = false
-        resultsMap.forEach {
-            if (it.value == true) {
-                permissionGranted = it.value
-            } else {
-                permissionGranted = false
-                return@forEach
-            }
-        }
-        if (permissionGranted) {
-            invokeCamera()
-        } else {
-            Toast.makeText(this, getString(R.string.cameraPermissionDenied), Toast.LENGTH_LONG).show()
-        }
-    }
     private fun invokeCamera() {
         val file = createImageFile()
         try {
@@ -417,7 +401,7 @@ class MainActivity : ComponentActivity() {
         return File.createTempFile(
             "Building_${timestamp}",
             ".jpg",
-                imageDirectory
+            imageDirectory
         ).apply {
             currentImagePath = absolutePath
         }
@@ -428,12 +412,31 @@ class MainActivity : ComponentActivity() {
         if (success) {
             Log.i(TAG, "Image Location: $uri")
             strUri = uri.toString()
+            val photo = Photo(localUri = uri.toString())
+            viewModel.photos.add(photo)
         } else {
             Log.e(TAG, "Image not saved: $uri")
         }
     }
 
-    //Possible issue with android.Manifest
+    private val requestMultiplePermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            resultsMap ->
+        var permissionGranted = false
+        resultsMap.forEach {
+            if (it.value == true) {
+                permissionGranted = it.value
+            } else {
+                permissionGranted = false
+                return@forEach
+            }
+        }
+        if (permissionGranted) {
+            invokeCamera()
+        } else {
+            Toast.makeText(this, getString(R.string.cameraPermissionDenied), Toast.LENGTH_LONG).show()
+        }
+    }
+
     fun hasCameraPermission() = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
     fun hasExternalStoragePermission() = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
