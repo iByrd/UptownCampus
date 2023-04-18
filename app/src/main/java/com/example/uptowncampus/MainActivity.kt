@@ -135,22 +135,22 @@ class MainActivity : ComponentActivity() {
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     savedBuildings.forEach {
-                        building -> DropdownMenuItem(onClick = {
+                        savedBuilding -> DropdownMenuItem(onClick = {
                             expanded = false
 
-                        if (building.buildingName == viewModel.NEW_BUILDING) {
+                        if (savedBuilding.buildingName == viewModel.NEW_BUILDING) {
                             // for new buildings to be added to the database
                             buildingText = ""
-                            building.buildingName = ""
+                            savedBuilding.buildingName = ""
                         } else {
                             // for existing buildings, to prevent duplication
-                            buildingText = building.toString()
-                            selectedBuilding = Building(buildingId = 0, buildingName = building.buildingName)
-                            inBuildingName = building.buildingName
+                            buildingText = savedBuilding.toString()
+                            selectedBuilding = Building(buildingId = savedBuilding.buildingId, buildingName = savedBuilding.buildingName)
+                            inBuildingName = savedBuilding.buildingName
                         }
-                        viewModel.selectedSavedBuilding = building
+                        viewModel.selectedSavedBuilding = savedBuilding
                     }) {
-                            Text(text = building.toString())
+                            Text(text = savedBuilding.toString())
                     }
                     }
                 }
@@ -250,7 +250,7 @@ class MainActivity : ComponentActivity() {
     ) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
-        var inComment by remember { mutableStateOf("") }
+        var inComment by remember (selectedSavedBuilding.savedBuildingId) { mutableStateOf(selectedSavedBuilding.comment) }
         val context = LocalContext.current
 
         Column {

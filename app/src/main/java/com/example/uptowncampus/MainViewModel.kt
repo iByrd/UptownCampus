@@ -22,7 +22,7 @@ import org.json.JSONException
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
     val photos: ArrayList<Photo> = ArrayList<Photo>()
-    internal val NEW_BUILDING = "New Building"
+    val NEW_BUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
     var savedBuildings: MutableLiveData<List<SavedBuildings>> = MutableLiveData<List<SavedBuildings>>()
     var selectedSavedBuilding by mutableStateOf(SavedBuildings())
@@ -50,12 +50,12 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
                       }
                       snapshot?.let {
                           val allBuildings = ArrayList<SavedBuildings>()
-                          allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING))
+                          allBuildings.add(SavedBuildings(buildingName = "New Building"))
                           val documents = snapshot.documents
                           documents.forEach {
                               val building = it.toObject(SavedBuildings::class.java)
                               building?.let {
-                                  allBuildings.add(it)
+                                  allBuildings.add(building)
                               }
                           }
                           savedBuildings.value = allBuildings
@@ -91,12 +91,12 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
         user?.let {
             user ->
             val document =
-                if (selectedSavedBuilding.buildingId == null || selectedSavedBuilding.buildingId.isEmpty()) {
+                if (selectedSavedBuilding.savedBuildingId == null || selectedSavedBuilding.savedBuildingId.isEmpty()) {
                     firestore.collection("users").document(user.uid).collection("buildings").document()
                 } else {
-                    firestore.collection("users").document(user.uid).collection("buildings").document(selectedSavedBuilding.buildingId)
+                    firestore.collection("users").document(user.uid).collection("buildings").document(selectedSavedBuilding.savedBuildingId)
                 }
-            selectedSavedBuilding.buildingId = document.id
+            selectedSavedBuilding.savedBuildingId = document.id
             val handle = document.set(selectedSavedBuilding)
             handle.addOnSuccessListener {
                 Log.d("Firebase", "Document Saved")
@@ -130,14 +130,20 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
     }
 
     private fun updatePhotoDatabase(photo: Photo) {
-        user?.let {
-            user ->
-            var photoCollection = firestore.collection("users").document(user.uid).collection("buildings").document(selectedSavedBuilding.buildingId).collection("photos")
-            var handle = photoCollection.add(photo)
+        user?.let { user ->
+            var photoDocument =
+                if (photo.id.isEmpty()) {
+                    firestore.collection("users").document(user.uid).collection("buildings")
+                        .document(selectedSavedBuilding.savedBuildingId).collection("photos").document()
+                } else {
+                    firestore.collection("users").document(user.uid).collection("buildings")
+                        .document(selectedSavedBuilding.savedBuildingId).collection("photos").document(photo.id)
+                }
+            photo.id = photoDocument.id
+
+            var handle = photoDocument.set(photo)
             handle.addOnSuccessListener {
                 Log.i(TAG, "Successfully updated photo metadata")
-                photo.id = it.id
-                firestore.collection("users").document(user.uid).collection("buildings").document(selectedSavedBuilding.buildingId).collection("photos").document(photo.id).set(photo)
             }
             handle.addOnFailureListener {
                 Log.e(TAG, "Error updating photo data: ${it.message}")
