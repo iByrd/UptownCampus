@@ -40,6 +40,7 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
+import com.example.uptowncampus.dto.User
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
     private var uri: Uri? = null
     private var currentImagePath: String = ""
-    private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
@@ -66,6 +67,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             viewModel.fetchBuildings()
+            firebaseUser?.let {
+                val user = User(it.uid, "")
+                viewModel.user = user
+                viewModel.listenForSavedBuildings()
+            }
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
             val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
@@ -368,7 +374,6 @@ class MainActivity : ComponentActivity() {
 
     private fun takePhoto() {
         if (hasCameraPermission() == PERMISSION_GRANTED && hasExternalStoragePermission() == PERMISSION_GRANTED){
-
             invokeCamera()
         } else {
             requestMultiplePermissionsLauncher.launch(arrayOf(
@@ -461,7 +466,13 @@ class MainActivity : ComponentActivity() {
     private fun signInResult(result: FirebaseAuthUIAuthenticationResult){
         val response = result.idpResponse
         if(result.resultCode == RESULT_OK){
-            user = FirebaseAuth.getInstance().currentUser
+            firebaseUser = FirebaseAuth.getInstance().currentUser
+            firebaseUser?.let {
+                val user = User(it.uid, it.displayName)
+                viewModel.user = user
+                viewModel.saveUser()
+                viewModel.listenForSavedBuildings()
+            }
         } else{
             Log.e("MainActivity.kt", "Error logging in" + response?.error?.errorCode)
         }

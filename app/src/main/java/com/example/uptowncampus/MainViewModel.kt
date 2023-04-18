@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.uptowncampus.dto.Building
 import com.example.uptowncampus.dto.SavedBuildings
 import com.example.uptowncampus.dto.StudentComment
+import com.example.uptowncampus.dto.User
 import com.example.uptowncampus.ui.theme.service.BuildingService
 import com.example.uptowncampus.ui.theme.service.IBuildingService
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,40 +23,43 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 
     internal val NEW_BUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
-
     var savedBuildings: MutableLiveData<List<SavedBuildings>> = MutableLiveData<List<SavedBuildings>>()
     var selectedSavedBuilding by mutableStateOf(SavedBuildings())
+    var user : User? = null
 
     private lateinit var firestore : FirebaseFirestore
 
     init {
         firestore = FirebaseFirestore.getInstance()
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        listenForSavedBuildings()
+
     }
 
       // MB - I was trying to link data to database but we need to fix how our database is setup
-    private fun listenForSavedBuildings() {
-        firestore.collection("buildings").addSnapshotListener {
-            snapshot, e ->
-            //handle error
-            if (e != null) {
-                Log.w("Listen Failed",e)
-                return@addSnapshotListener
-            }
-            snapshot?.let {
-                val allBuildings = ArrayList<SavedBuildings>()
-                allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING))
-                val documents = snapshot.documents
-                documents.forEach {
-                    val building = it.toObject(SavedBuildings::class.java)
-                    building?.let {
-                        allBuildings.add(it)
-                    }
-                }
-                savedBuildings.value = allBuildings
-            }
-        }
+    fun listenForSavedBuildings() {
+          user?.let {
+              user ->
+              firestore.collection("users").document(user.uid).collection("buildings")
+                  .addSnapshotListener { snapshot, e ->
+                      //handle error
+                      if (e != null) {
+                          Log.w("Listen Failed", e)
+                          return@addSnapshotListener
+                      }
+                      snapshot?.let {
+                          val allBuildings = ArrayList<SavedBuildings>()
+                          allBuildings.add(SavedBuildings(buildingName = NEW_BUILDING))
+                          val documents = snapshot.documents
+                          documents.forEach {
+                              val building = it.toObject(SavedBuildings::class.java)
+                              building?.let {
+                                  allBuildings.add(it)
+                              }
+                          }
+                          savedBuildings.value = allBuildings
+                      }
+                  }
+          }
     }
 
     fun fetchBuildings() {
@@ -82,14 +86,27 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
 //    }
 
     fun saveBuilding() {
-        val document = if (selectedSavedBuilding.buildingId.isEmpty() || selectedSavedBuilding.buildingId == null) {
-            firestore.collection("buildings").document()
-        } else {
-            firestore.collection("buildings").document(selectedSavedBuilding.buildingId)
+        user?.let {
+            user ->
+            val document =
+                if (selectedSavedBuilding.buildingId.isEmpty() || selectedSavedBuilding.buildingId == null) {
+                    firestore.collection("users").document(user.uid).collection("buildings").document()
+                } else {
+                    firestore.collection("users").document(user.uid).collection("buildings").document(selectedSavedBuilding.buildingId)
+                }
+            selectedSavedBuilding.buildingId = document.id
+            val handle = document.set(selectedSavedBuilding)
+            handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
+            handle.addOnFailureListener { Log.e("Firebase", "Save failed $it") }
         }
-        selectedSavedBuilding.buildingId = document.id
-        val handle = document.set(selectedSavedBuilding)
-        handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
-        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
+    }
+
+    fun saveUser () {
+        user?.let {
+            user ->
+            val handle = firestore.collection("users").document(user.uid).set(user)
+            handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
+            handle.addOnFailureListener { Log.e("Firebase", "Save failed $it") }
+        }
     }
 }
