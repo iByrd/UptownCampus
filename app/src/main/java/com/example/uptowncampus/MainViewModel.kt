@@ -59,7 +59,7 @@ class MainViewModel(private var BuildingService : IBuildingService? = null) : Vi
             try{
                 buildings.postValue(BuildingService?.fetchBuilding())
             } catch(e: JSONException){
-                Log.e("buildingService", "Failed to fetch buildings")
+                Log.e("buildingService", "Failed to fetch buildings",e)
             }
         }
     }
@@ -86,6 +86,6 @@ class MainViewModel(private var BuildingService : IBuildingService? = null) : Vi
         selectedSavedBuilding?.buildingId = document.id
         val handle = document.set(selectedSavedBuilding)
         handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
-        handle.addOnFailureListener { Log.e("Firebase", "Save failed $it")}
+        handle.addOnFailureListener {e ->  Log.e("Firebase", "Save failed", e)}
     }
 }
