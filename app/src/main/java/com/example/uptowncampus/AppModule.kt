@@ -1,7 +1,7 @@
 package com.example.uptowncampus
 
-import com.example.uptowncampus.service.BuildingService
-import com.example.uptowncampus.service.IBuildingService
+import com.example.uptowncampus.ui.theme.service.BuildingService
+import com.example.uptowncampus.ui.theme.service.IBuildingService
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module

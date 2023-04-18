@@ -1,10 +1,15 @@
 package com.example.uptowncampus
 
+import android.content.ContentValues.TAG
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -30,8 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
 import com.example.uptowncampus.dto.Building
+import com.example.uptowncampus.dto.Photo
 import com.example.uptowncampus.dto.SavedBuildings
+import com.example.uptowncampus.dto.User
 import com.example.uptowncampus.ui.theme.UptownCampusTheme
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -39,18 +49,30 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : ComponentActivity() {
 
-    private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    private var uri: Uri? = null
+    private lateinit var currentImagePath: String
+    private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var selectedBuilding: Building? = null
     private val viewModel: MainViewModel by viewModel()
     private var inBuildingName: String = ""
+    private var strUri by mutableStateOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             viewModel.fetchBuildings()
+            firebaseUser?.let {
+                val user = User(it.uid, "")
+                viewModel.user = user
+                viewModel.listenForSavedBuildings()
+            }
             val buildings by viewModel.buildings.observeAsState(initial = emptyList())
             val savedBuildings by viewModel.savedBuildings.observeAsState(initial = emptyList())
             UptownCampusTheme {
@@ -113,22 +135,22 @@ class MainActivity : ComponentActivity() {
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     savedBuildings.forEach {
-                        building -> DropdownMenuItem(onClick = {
+                        savedBuilding -> DropdownMenuItem(onClick = {
                             expanded = false
 
-                        if (building.buildingName == viewModel.NEW_BUILDING) {
+                        if (savedBuilding.buildingName == viewModel.NEW_BUILDING) {
                             // for new buildings to be added to the database
                             buildingText = ""
-                            building.buildingName = ""
+                            savedBuilding.buildingName = ""
                         } else {
                             // for existing buildings, to prevent duplication
-                            buildingText = building.toString()
-                            selectedBuilding = Building(buildingId = 0, buildingName = building.buildingName)
-                            inBuildingName = building.buildingName
+                            buildingText = savedBuilding.toString()
+                            selectedBuilding = Building(buildingId = savedBuilding.buildingId, buildingName = savedBuilding.buildingName)
+                            inBuildingName = savedBuilding.buildingName
                         }
-                        viewModel.selectedSavedBuilding = building
+                        viewModel.selectedSavedBuilding = savedBuilding
                     }) {
-                            Text(text = building.toString())
+                            Text(text = savedBuilding.toString())
                     }
                     }
                 }
@@ -228,7 +250,7 @@ class MainActivity : ComponentActivity() {
     ) {
         var diningOptions by remember { mutableStateOf("") }
         var activityName by remember { mutableStateOf("") }
-        var inComment by remember { mutableStateOf("") }
+        var inComment by remember (selectedSavedBuilding.savedBuildingId) { mutableStateOf(selectedSavedBuilding.comment) }
         val context = LocalContext.current
 
         Column {
@@ -311,8 +333,13 @@ class MainActivity : ComponentActivity() {
             Button(
                 shape = CutCornerShape(10),
                 onClick = {
-                    selectedSavedBuilding.apply {
+                    viewModel.selectedSavedBuilding.apply {
                         buildingName = inBuildingName
+                        buildingId = selectedBuilding?.let {
+                            it.buildingId
+                        } ?: 0
+                        comment = inComment
+
                     }
                    /* val studentComment = StudentComment().apply {
                         commentContent = inComment
@@ -334,8 +361,89 @@ class MainActivity : ComponentActivity() {
                 )
                 Text(text = stringResource(R.string.submit))
             }
+            Button(
+                shape = CutCornerShape(10),
+                onClick = {
+                    takePhoto()
+                }
+            ){
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = "Photo Button Icon",
+                    Modifier.padding(end = 8.dp)
+                )
+                Text(text = "photo")
+            }
+            AsyncImage(model = strUri, contentDescription = "Building Image")
         }
     }
+
+    private fun takePhoto() {
+        if (hasCameraPermission() == PERMISSION_GRANTED && hasExternalStoragePermission() == PERMISSION_GRANTED){
+            invokeCamera()
+        } else {
+            requestMultiplePermissionsLauncher.launch(arrayOf(
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ))
+        }
+    }
+
+    private fun invokeCamera() {
+        val file = createImageFile()
+        try {
+            uri = FileProvider.getUriForFile(this, "com.example.uptowncampus.fileprovider", file)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error: ${e.message}")
+            var foo = e.message
+        }
+        getCameraImage.launch(uri)
+    }
+
+    private fun createImageFile() : File {
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "Building_${timestamp}",
+            ".jpg",
+            imageDirectory
+        ).apply {
+            currentImagePath = absolutePath
+        }
+    }
+
+    private val getCameraImage = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        success ->
+        if (success) {
+            Log.i(TAG, "Image Location: $uri")
+            strUri = uri.toString()
+            val photo = Photo(localUri = uri.toString())
+            viewModel.photos.add(photo)
+        } else {
+            Log.e(TAG, "Image not saved: $uri")
+        }
+    }
+
+    private val requestMultiplePermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            resultsMap ->
+        var permissionGranted = false
+        resultsMap.forEach {
+            if (it.value == true) {
+                permissionGranted = it.value
+            } else {
+                permissionGranted = false
+                return@forEach
+            }
+        }
+        if (permissionGranted) {
+            invokeCamera()
+        } else {
+            Toast.makeText(this, getString(R.string.cameraPermissionDenied), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun hasCameraPermission() = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+    fun hasExternalStoragePermission() = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     @Preview(showBackground = true)
     @Composable
@@ -366,7 +474,13 @@ class MainActivity : ComponentActivity() {
     private fun signInResult(result: FirebaseAuthUIAuthenticationResult){
         val response = result.idpResponse
         if(result.resultCode == RESULT_OK){
-            user = FirebaseAuth.getInstance().currentUser
+            firebaseUser = FirebaseAuth.getInstance().currentUser
+            firebaseUser?.let {
+                val user = User(it.uid, it.displayName)
+                viewModel.user = user
+                viewModel.saveUser()
+                viewModel.listenForSavedBuildings()
+            }
         } else{
             Log.e("MainActivity.kt", "Error logging in" + response?.error?.errorCode)
         }

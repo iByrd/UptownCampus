@@ -1,4 +1,4 @@
-package com.example.uptowncampus.service
+package com.example.uptowncampus.ui.theme.service
 
 import com.example.uptowncampus.RetrofitClientInstance
 import com.example.uptowncampus.dao.IBuildingDAO

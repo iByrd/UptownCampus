@@ -6,4 +6,6 @@
     <string name="buildingNameLabel">Building Name</string>
     <string name="comment">Comment</string>
     <string name="submit">Submit</string>
+    <string name="cameraPermissionDenied">unable to load camera without permission</string>
+    <string name="photo">Photo</string>
 </resources>

@@ -3,7 +3,7 @@ package com.example.uptowncampus
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.uptowncampus.dto.Building
-import com.example.uptowncampus.service.BuildingService
+import com.example.uptowncampus.ui.theme.service.BuildingService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
