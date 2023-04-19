@@ -21,7 +21,8 @@ import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
-    val photos: ArrayList<Photo> = ArrayList<Photo>()
+    val eventPhotos: MutableLiveData<List<Photo>> = MutableLiveData<List<Photo>>()
+    val photos: ArrayList<Photo> by mutableStateOf(ArrayList<Photo>())
     val NEW_BUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
     var savedBuildings: MutableLiveData<List<SavedBuildings>> = MutableLiveData<List<SavedBuildings>>()
@@ -129,7 +130,7 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
         }
     }
 
-    private fun updatePhotoDatabase(photo: Photo) {
+    internal fun updatePhotoDatabase(photo: Photo) {
         user?.let { user ->
             var photoDocument =
                 if (photo.id.isEmpty()) {
@@ -158,5 +159,48 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
             handle.addOnSuccessListener { Log.d("Firebase", "Document Saved") }
             handle.addOnFailureListener { Log.e("Firebase", "Save failed $it") }
         }
+    }
+
+    fun fetchPhotos() {
+        user?.let {
+            user ->
+            var photoCollection = firestore.collection("users").document(user.uid).collection("buildings")
+                .document(selectedSavedBuilding.savedBuildingId).collection("photos")
+            var photoListener = photoCollection.addSnapshotListener {
+                querySnapshot, firebaseFirestoreException ->
+                querySnapshot?.let {
+                    querySnapshot ->
+                    var documents = querySnapshot.documents
+                    var inPhotos = ArrayList<Photo>()
+                    documents?.forEach {
+                        var photo = it.toObject(Photo::class.java)
+                        photo?.let {
+                            inPhotos.add(it)
+                        }
+                    }
+                    eventPhotos.value = inPhotos
+                }
+            }
+        }
+
+    }
+
+    fun delete(photo: Photo) {
+        user?.let {
+            user ->
+            var photoCollection = firestore.collection("users").document(user.uid).collection("buildings")
+                .document(selectedSavedBuilding.savedBuildingId).collection("photos")
+            photoCollection.document(photo.id).delete()
+            val uri = Uri.parse(photo.localUri)
+            val imageRef = storageReference.child("images/${user.uid}/${uri.lastPathSegment}")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    Log.i(TAG, "Photo binary file deleted ${photo}")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Photo delete failed.   ${it.message}")
+                }
+        }
+
     }
 }
