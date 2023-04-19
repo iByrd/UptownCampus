@@ -149,6 +149,9 @@ class MainActivity : ComponentActivity() {
                             inBuildingName = savedBuilding.buildingName
                         }
                         viewModel.selectedSavedBuilding = savedBuilding
+                        if (buildingText != ""){
+                            viewModel.fetchPhotos()
+                        }
                     }) {
                             Text(text = savedBuilding.toString())
                     }
