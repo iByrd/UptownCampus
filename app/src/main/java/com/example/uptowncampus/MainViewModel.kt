@@ -175,12 +175,31 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
                     documents?.forEach {
                         var photo = it.toObject(Photo::class.java)
                         photo?.let {
-                            inPhotos.add(photo)
+                            inPhotos.add(it)
                         }
                     }
                     eventPhotos.value = inPhotos
                 }
             }
+        }
+
+    }
+
+    fun delete(photo: Photo) {
+        user?.let {
+            user ->
+            var photoCollection = firestore.collection("users").document(user.uid).collection("buildings")
+                .document(selectedSavedBuilding.savedBuildingId).collection("photos")
+            photoCollection.document(photo.id).delete()
+            val uri = Uri.parse(photo.localUri)
+            val imageRef = storageReference.child("images/${user.uid}/${uri.lastPathSegment}")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    Log.i(TAG, "Photo binary file deleted ${photo}")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Photo delete failed.   ${it.message}")
+                }
         }
 
     }
