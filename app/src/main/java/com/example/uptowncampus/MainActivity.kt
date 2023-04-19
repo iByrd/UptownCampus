@@ -12,8 +12,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Comment
@@ -53,6 +55,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.compose.foundation.lazy.items
 
 class MainActivity : ComponentActivity() {
 
@@ -333,53 +336,112 @@ class MainActivity : ComponentActivity() {
                     colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = Color.White)
                 )
             }
-            Button(
-                shape = CutCornerShape(10),
-                onClick = {
-                    viewModel.selectedSavedBuilding.apply {
-                        buildingName = inBuildingName
-                        buildingId = selectedBuilding?.let {
-                            it.buildingId
-                        } ?: 0
-                        comment = inComment
 
+            Row(modifier = Modifier.padding(all = 2.dp)) {
+                Button(
+                    shape = CutCornerShape(10),
+                    onClick = {
+                        viewModel.selectedSavedBuilding.apply {
+                            buildingName = inBuildingName
+                            buildingId = selectedBuilding?.let {
+                                it.buildingId
+                            } ?: 0
+                            comment = inComment
+
+                        }
+                        /* val studentComment = StudentComment().apply {
+                             commentContent = inComment
+                         }*/
+                        //viewModel.save(studentComment)
+                        viewModel.saveBuilding()
+                        Toast.makeText(
+                            context,
+                            "$inBuildingName $diningOptions $activityName",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
-                   /* val studentComment = StudentComment().apply {
-                        commentContent = inComment
-                    }*/
-                    //viewModel.save(studentComment)
-                    viewModel.saveBuilding()
-                    Toast.makeText(
-                        context,
-                        "$inBuildingName $diningOptions $activityName",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            )
-            {
-                Icon(
-                    imageVector = Icons.Filled.Save,
-                    contentDescription = "Save Button Icon",
-                    Modifier.padding(end = 8.dp)
                 )
-                Text(text = stringResource(R.string.submit))
-            }
-            Button(
-                shape = CutCornerShape(10),
-                onClick = {
-                    takePhoto()
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Save,
+                        contentDescription = "Save Button Icon",
+                        Modifier.padding(end = 8.dp)
+                    )
+                    Text(text = stringResource(R.string.submit))
                 }
-            ){
-                Icon(
-                    imageVector = Icons.Filled.Save,
-                    contentDescription = "Photo Button Icon",
-                    Modifier.padding(end = 8.dp)
-                )
-                Text(text = "photo")
+                Button(
+                    shape = CutCornerShape(10),
+                    onClick = {
+                        takePhoto()
+                    }
+                ){
+                    Icon(
+                        imageVector = Icons.Filled.CameraAlt,
+                        contentDescription = "Photo Button Icon",
+                        Modifier.padding(end = 8.dp)
+                    )
+                    Text(text = "photo")
+                }
             }
-            AsyncImage(model = strUri, contentDescription = "Building Image")
+            Events()
         }
     }
+
+    @Composable
+    private fun Events () {
+        val photos by viewModel.eventPhotos.observeAsState(initial = emptyList())
+        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
+            items (
+                items = photos,
+                itemContent = {
+                    EventListItem(photo = it)
+                }
+                    )
+        }
+
+    }
+
+    @Composable
+    fun EventListItem(photo: Photo) {
+        var inDescription by remember(photo.id) { mutableStateOf(photo.description) }
+        Row {
+            Column(Modifier.weight(2f)) {
+                AsyncImage(model = photo.localUri, contentDescription = "Building Image",
+                    Modifier
+                        .width(64.dp)
+                        .height(64.dp))
+            }
+            Column(Modifier.weight(4f)) {
+                Text(text = photo.id, style=typography.h6)
+                Text(text = photo.dateTaken.toString(), style = typography.caption)
+                OutlinedTextField(
+                    value = inDescription,
+                    onValueChange = { inDescription = it },
+                    label = { Text(stringResource(R.string.description))},
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Column(Modifier.weight(1f)) {
+                Button (
+                    onClick = {
+                        photo.description = inDescription
+                        save(photo)
+                    }
+                        ) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = "Save",
+                        modifier = Modifier.padding(end=8.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun save(photo: Photo) {
+        viewModel.updatePhotoDatabase(photo)
+    }
+
 
     private fun takePhoto() {
         if (hasCameraPermission() == PERMISSION_GRANTED && hasExternalStoragePermission() == PERMISSION_GRANTED){

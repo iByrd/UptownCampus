@@ -21,6 +21,7 @@ import org.json.JSONException
 
 class MainViewModel(var buildingService : IBuildingService = BuildingService()) : ViewModel() {
 
+    val eventPhotos: MutableLiveData<List<Photo>> = MutableLiveData<List<Photo>>()
     val photos: ArrayList<Photo> by mutableStateOf(ArrayList<Photo>())
     val NEW_BUILDING = "New Building"
     var buildings: MutableLiveData<List<Building>> = MutableLiveData<List<Building>>()
@@ -129,7 +130,7 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
         }
     }
 
-    private fun updatePhotoDatabase(photo: Photo) {
+    internal fun updatePhotoDatabase(photo: Photo) {
         user?.let { user ->
             var photoDocument =
                 if (photo.id.isEmpty()) {
@@ -161,7 +162,6 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
     }
 
     fun fetchPhotos() {
-        photos.clear()
         user?.let {
             user ->
             var photoCollection = firestore.collection("users").document(user.uid).collection("buildings")
@@ -171,12 +171,14 @@ class MainViewModel(var buildingService : IBuildingService = BuildingService()) 
                 querySnapshot?.let {
                     querySnapshot ->
                     var documents = querySnapshot.documents
+                    var inPhotos = ArrayList<Photo>()
                     documents?.forEach {
                         var photo = it.toObject(Photo::class.java)
                         photo?.let {
-                            photos.add(it)
+                            inPhotos.add(photo)
                         }
                     }
+                    eventPhotos.value = inPhotos
                 }
             }
         }
